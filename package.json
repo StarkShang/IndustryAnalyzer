@@ -15,6 +15,7 @@
     },
     "main": "background.js",
     "dependencies": {
+        "circle-flags": "git+https://github.com/HatScripts/circle-flags.git",
         "core-js": "^3.6.5",
         "vue": "^2.6.11",
         "vue-class-component": "^7.2.3",
