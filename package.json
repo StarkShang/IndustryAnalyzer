@@ -17,6 +17,7 @@
     "dependencies": {
         "circle-flags": "git+https://github.com/HatScripts/circle-flags.git",
         "core-js": "^3.6.5",
+        "element-ui": "^2.4.5",
         "vue": "^2.6.11",
         "vue-class-component": "^7.2.3",
         "vue-property-decorator": "^9.1.2",
@@ -45,6 +46,7 @@
         "sass-loader": "^10.1.1",
         "typescript": "^4.1.3",
         "vue-cli-plugin-electron-builder": "~2.0.0-rc.5",
+        "vue-cli-plugin-element": "~1.0.1",
         "vue-template-compiler": "^2.6.11"
     },
     "bugs": {
