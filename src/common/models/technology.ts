@@ -5,6 +5,11 @@ import { News } from "./news";
 export class TechnologyRelatedCorporationInfo {
     public id = -1;
     public corporation = Corporation.Empty;
+    public description = "";
+
+    public static get Empty(): TechnologyRelatedCorporationInfo {
+        return new TechnologyRelatedCorporationInfo();
+    }
 }
 
 export class Technology {

@@ -1,15 +1,25 @@
 <template>
     <div>
         <div class="body">
+            <div>
+                {{ viewmodel.technology.description }}
+            </div>
             <el-tabs v-model="activeTabName" @tab-click="handleTabClick">
-                <el-tab-pane label="科研进展" name="researches"></el-tab-pane>
-                <el-tab-pane label="相关企业" name="corporations"></el-tab-pane>
+                <el-tab-pane label="科研进展" name="researches">
+                    <news-timeline></news-timeline>
+                </el-tab-pane>
+                <el-tab-pane label="相关企业" name="corporations">
+                    <technology-corporation-panel
+                        :statistics="viewmodel.technologyCorporationStatistics"
+                        :connection="viewmodel.technology.corporations">
+                    </technology-corporation-panel>
+                </el-tab-pane>
                 <el-tab-pane label="相关专利" name="patents"></el-tab-pane>
             </el-tabs>
 
-            <keep-alive>
+            <!-- <keep-alive>
                 <component v-bind:is="activeTabComponent"></component>
-            </keep-alive>
+            </keep-alive> -->
         </div>
         <page-header class="header">
             {{ viewmodel.technology.name }}
@@ -19,12 +29,14 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Technology } from "@/common/models";
+import { Corporation, CountryStatistic, Technology, TechnologyRelatedCorporationInfo } from "@/common/models";
 import PageHeader from "@/common/components/PageHeader.vue";
 import NewsTimeline from "@/common/components/NewsTimeline.vue";
+import TechnologyCorporationPanel from "./components/TechnologyCorporationPanel.vue";
 
 class ViewModel {
     public technology = Technology.Empty;
+    public technologyCorporationStatistics: CountryStatistic[] = [];
 }
 
 @Component({
@@ -32,6 +44,7 @@ class ViewModel {
     components: {
         PageHeader,
         NewsTimeline,
+        TechnologyCorporationPanel,
     },
 })
 export default class TechnologyDetail extends Vue {
@@ -41,8 +54,33 @@ export default class TechnologyDetail extends Vue {
     public get activeTabComponent(): string {
         switch (this.activeTabName) {
             case "researches": return "NewsTimeline";
+            case "corporations": return "TechnologyCorporationPanel";
             default: return "";
         }
+    }
+
+    public created(): void {
+        this.viewmodel.technology.name = "芯片倒装技术";
+        this.viewmodel.technology.description = "芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述";
+        const data1 = CountryStatistic.Empty;
+        data1.country = "china";
+        data1.number = 23;
+        const data2 = CountryStatistic.Empty;
+        data2.country = "america";
+        data2.number = 16;
+        this.viewmodel.technologyCorporationStatistics.push(data1);
+        this.viewmodel.technologyCorporationStatistics.push(data2);
+
+        const corp1 = TechnologyRelatedCorporationInfo.Empty;
+        corp1.corporation = Corporation.Empty;
+        corp1.corporation.name = "三星";
+        corp1.description = "三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术";
+        const corp2 = TechnologyRelatedCorporationInfo.Empty;
+        corp2.corporation = Corporation.Empty;
+        corp2.corporation.name = "三星";
+        corp2.description = "三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术";
+        this.viewmodel.technology.corporations.append(corp1);
+        this.viewmodel.technology.corporations.append(corp1);
     }
 
     public handleTabClick(tab: string): void {
