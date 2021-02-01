@@ -14,12 +14,13 @@
                         :connection="viewmodel.technology.corporations">
                     </technology-corporation-panel>
                 </el-tab-pane>
-                <el-tab-pane label="相关专利" name="patents"></el-tab-pane>
+                <el-tab-pane label="相关专利" name="patents">
+                    <patent-panel
+                        :statistics="viewmodel.patentStatistics"
+                        :connection="viewmodel.technology.patents">
+                    </patent-panel>
+                </el-tab-pane>
             </el-tabs>
-
-            <!-- <keep-alive>
-                <component v-bind:is="activeTabComponent"></component>
-            </keep-alive> -->
         </div>
         <page-header class="header">
             {{ viewmodel.technology.name }}
@@ -29,14 +30,16 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Corporation, CountryStatistic, Technology, TechnologyRelatedCorporationInfo } from "@/common/models";
+import { Corporation, Country, CountryStatistic, Patent, Technology, TechnologyRelatedCorporationInfo } from "@/common/models";
 import PageHeader from "@/common/components/PageHeader.vue";
 import NewsTimeline from "@/common/components/NewsTimeline.vue";
 import TechnologyCorporationPanel from "./components/TechnologyCorporationPanel.vue";
+import PatentPanel from "./components/PatentPanel.vue";
 
 class ViewModel {
     public technology = Technology.Empty;
     public technologyCorporationStatistics: CountryStatistic[] = [];
+    public patentStatistics: CountryStatistic[] = [];
 }
 
 @Component({
@@ -45,6 +48,7 @@ class ViewModel {
         PageHeader,
         NewsTimeline,
         TechnologyCorporationPanel,
+        PatentPanel,
     },
 })
 export default class TechnologyDetail extends Vue {
@@ -70,6 +74,8 @@ export default class TechnologyDetail extends Vue {
         data2.number = 16;
         this.viewmodel.technologyCorporationStatistics.push(data1);
         this.viewmodel.technologyCorporationStatistics.push(data2);
+        this.viewmodel.patentStatistics.push(data1);
+        this.viewmodel.patentStatistics.push(data2);
 
         const corp1 = TechnologyRelatedCorporationInfo.Empty;
         corp1.corporation = Corporation.Empty;
@@ -81,6 +87,14 @@ export default class TechnologyDetail extends Vue {
         corp2.description = "三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术三星集团掌握了芯片倒装技术";
         this.viewmodel.technology.corporations.append(corp1);
         this.viewmodel.technology.corporations.append(corp1);
+
+        const patent1 = Patent.Empty;
+        patent1.title = "芯片倒装技术专利";
+        patent1.number = "123asdasdasdsd";
+        patent1.owner = Corporation.Empty;
+        patent1.owner.name = "三星";
+        patent1.owner.country.code = "cn";
+        this.viewmodel.technology.patents.append(patent1);
     }
 
     public handleTabClick(tab: string): void {
