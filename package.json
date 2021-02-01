@@ -15,7 +15,6 @@
     },
     "main": "background.js",
     "dependencies": {
-        "circle-flags": "git+https://github.com/HatScripts/circle-flags.git",
         "core-js": "^3.6.5",
         "element-ui": "^2.4.5",
         "moment": "^2.29.1",
