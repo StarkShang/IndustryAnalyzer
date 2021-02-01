@@ -63,10 +63,10 @@ export default class TechnologyDetail extends Vue {
         this.viewmodel.technology.name = "芯片倒装技术";
         this.viewmodel.technology.description = "芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述芯片倒装技术的描述";
         const data1 = CountryStatistic.Empty;
-        data1.country = "china";
+        data1.country = "cn";
         data1.number = 23;
         const data2 = CountryStatistic.Empty;
-        data2.country = "america";
+        data2.country = "us";
         data2.number = 16;
         this.viewmodel.technologyCorporationStatistics.push(data1);
         this.viewmodel.technologyCorporationStatistics.push(data2);
