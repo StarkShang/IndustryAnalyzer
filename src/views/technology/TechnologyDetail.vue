@@ -4,7 +4,7 @@
             <div>
                 {{ viewmodel.technology.description }}
             </div>
-            <el-tabs v-model="activeTabName" @tab-click="handleTabClick">
+            <el-tabs v-model="activeTabName">
                 <el-tab-pane label="科研进展" name="researches">
                     <news-timeline></news-timeline>
                 </el-tab-pane>
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Corporation, Country, CountryStatistic, Patent, Technology, TechnologyRelatedCorporationInfo } from "@/common/models";
+import { Corporation, CountryStatistic, Patent, Technology, TechnologyRelatedCorporationInfo } from "@/common/models";
 import PageHeader from "@/common/components/PageHeader.vue";
 import NewsTimeline from "@/common/components/NewsTimeline.vue";
 import TechnologyCorporationPanel from "./components/TechnologyCorporationPanel.vue";
@@ -54,14 +54,6 @@ class ViewModel {
 export default class TechnologyDetail extends Vue {
     public viewmodel = new ViewModel();
     public activeTabName = "researches";
-
-    public get activeTabComponent(): string {
-        switch (this.activeTabName) {
-            case "researches": return "NewsTimeline";
-            case "corporations": return "TechnologyCorporationPanel";
-            default: return "";
-        }
-    }
 
     public created(): void {
         this.viewmodel.technology.name = "芯片倒装技术";
@@ -95,10 +87,6 @@ export default class TechnologyDetail extends Vue {
         patent1.owner.name = "三星";
         patent1.owner.country.code = "cn";
         this.viewmodel.technology.patents.append(patent1);
-    }
-
-    public handleTabClick(tab: string): void {
-        console.log(tab);
     }
 }
 </script>

@@ -1,15 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-
+import { routes } from "./routes";
 Vue.use(VueRouter);
-
-const routes: Array<RouteConfig> = [
-    {
-        path: "/technologies/:id",
-        name: "TechnologyDetail",
-        component: () => import("@/views/technology/TechnologyDetail.vue"),
-    },
-];
 
 const router = new VueRouter({
     mode: "hash",

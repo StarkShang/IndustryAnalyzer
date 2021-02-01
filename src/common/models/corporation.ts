@@ -9,3 +9,13 @@ export class Corporation {
         return new Corporation();
     }
 }
+
+export class ConceptRelatedCorporationInfo {
+    public id = -1;
+    public corporation = Corporation.Empty;
+    public description = "";
+
+    public static get Empty(): ConceptRelatedCorporationInfo {
+        return new ConceptRelatedCorporationInfo();
+    }
+}
