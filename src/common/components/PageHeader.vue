@@ -2,10 +2,12 @@
     <div class="header-container">
         <div class="header-content">
             <span>
-                <i class="el-icon-arrow-left"></i>
+                <span class="back-button" @click="back">
+                    <i class="el-icon-arrow-left"></i>
+                </span>
                 <slot name="header"></slot>
             </span>
-            <span>
+            <span class="header-title">
                 <slot></slot>
             </span>
             <span>
@@ -16,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import router from "@/router";
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
@@ -23,6 +26,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 })
 export default class PageHeader extends Vue {
     @Prop({ default: "" }) public title!: string;
+    @Prop({ default: () => () => router.back() }) public back!: () => void;
 }
 </script>
 
@@ -35,6 +39,13 @@ export default class PageHeader extends Vue {
         max-width: 1200px;
         padding: 1em;
         margin: 0 auto;
+
+        .back-button {
+            cursor: pointer;
+        }
+        .header-title {
+            margin: 0 auto;
+        }
     }
 }
 </style>
