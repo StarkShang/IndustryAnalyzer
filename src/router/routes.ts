@@ -1,6 +1,6 @@
 import { RouteConfig } from "vue-router";
 
-export const routes: Array<RouteConfig> = [
+export const routes: RouteConfig[] = [
     {
         path: "/technologies/:id",
         name: "TechnologyDetail",
@@ -11,4 +11,9 @@ export const routes: Array<RouteConfig> = [
         name: "CorporationDetail",
         component: () => import("@/views/corporation/CorporationDetail.vue"),
     },
+    {
+        path: "/concepts/:id",
+        name: "ConceptDetail",
+        component: () => import("@/views/concept/ConceptDetail.vue"),
+    }
 ];
