@@ -2,7 +2,7 @@
     <div class="home">
         <div>
             <span>主页</span>
-            <el-button>新建</el-button>
+            <el-button @click="openConceptEditor">新建</el-button>
         </div>
         <div>
             <div class="section-title">收藏</div>
@@ -23,9 +23,9 @@
             </connection-panel>
         </div>
 
-        <concept-dialog
+        <concept-editor
             :visible.sync="viewmodel.conceptEditorVisible">
-        </concept-dialog>
+        </concept-editor>
     </div>
 </template>
 
@@ -34,7 +34,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { Concept, Connection } from "@/common/models";
 import ConceptItem from "@/common/components/ConceptItem.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
-import ConceptEditor from "@/common/components/ConceptEditor.vue";
+import ConceptEditor from "@/common/components/dialogs/ConceptEditor.vue";
 
 class ViewModel {
     public conceptEditorVisible = false;
@@ -73,6 +73,10 @@ export default class Home extends Vue {
                 params: { id: concept.id.toString() }
             });
         }
+    }
+
+    public openConceptEditor() {
+        this.viewmodel.conceptEditorVisible = true;
     }
 }
 </script>
