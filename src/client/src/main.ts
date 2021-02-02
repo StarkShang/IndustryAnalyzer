@@ -3,14 +3,15 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./plugins/element";
-import CountryFlag from "@attonex/vue-country";
+import "./plugins/country";
+import { apolloProvider } from "./plugins/apollo";
 
 Vue.config.productionTip = false;
 
-Vue.use(CountryFlag);
 
 new Vue({
     router,
     store,
+    apolloProvider,
     render: (h) => h(App),
 }).$mount("#app");
