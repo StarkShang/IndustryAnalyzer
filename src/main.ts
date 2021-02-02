@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./plugins/element";
-import CountryFlag from "@attonex/country-flag";
+import CountryFlag from "@attonex/vue-country";
 
 Vue.config.productionTip = false;
 

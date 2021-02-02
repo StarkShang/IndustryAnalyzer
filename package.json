@@ -15,6 +15,7 @@
     },
     "main": "background.js",
     "dependencies": {
+        "@attonex/vue-country": "^0.1.0",
         "core-js": "^3.6.5",
         "element-ui": "^2.4.5",
         "moment": "^2.29.1",

@@ -1,0 +1,47 @@
+# import BigInt from "common.graphql"
+# import PageInfo from "common.graphql"
+# import PageParam from "common.graphql"
+# import Corporation from "corporation.graphql"
+# import TechnologyConnection from "technology.graphql"
+
+type ConceptRelatedCorporation {
+    id: BigInt!
+    description: String!
+    corporation: Corporation!
+}
+
+type ConceptRelatedCorporationEdge {
+    node: ConceptRelatedCorporation!
+    cursor: String!
+}
+
+type ConceptRelatedCorporationConnection {
+    edges: [ConceptRelatedCorporationEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type Concept {
+    id: BigInt!
+    name: String!
+    description: String!
+    industryChain: String!
+    competitors(pageParam: PageParam): ConceptConnection!
+    technologies(pageParam: PageParam): TechnologyConnection!
+    corporations(pageParam: PageParam): ConceptRelatedCorporationConnection!
+}
+
+type ConceptEdge {
+    node: Concept!
+    cursor: String!
+}
+
+type ConceptConnection {
+    edges: [ConceptEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type Query {
+    concept(id: BigInt!): Concept
+}

@@ -1,0 +1,28 @@
+# import BigInt from "common.graphql"
+# import DateTime from "common.graphql"
+# import PageInfo from "common.graphql"
+# import Corporation from "corporation.graphql"
+
+type Patent {
+    id: BigInt!
+    title: String!
+    number: String!
+    applyDate: DateTime!
+    publicDate: DateTime
+    owner: Corporation!
+}
+
+type PatentEdge {
+    node: Patent!
+    cursor: String!
+}
+
+type PatentConnection {
+    edges: [PatentEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type Query {
+    patent(id: BigInt!): Patent
+}

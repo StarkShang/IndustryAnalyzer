@@ -1,0 +1,12 @@
+# import BigInt from "common.graphql"
+# import Country from "country.graphql"
+
+type Corporation {
+    id: BigInt!
+    name: String!
+    country: Country!
+}
+
+type Query {
+    corporation(id: BigInt!): Corporation
+}

@@ -1,0 +1,47 @@
+# import BigInt from "common.graphql"
+# import PageInfo from "common.graphql"
+# import PageParam from "common.graphql"
+# import Corporation from "corporation.graphql"
+# import NewsConnection from "news.graphql"
+# import PatentConnection from "patent.graphql"
+
+type TechnologyRelatedCorporation {
+    id: BigInt!
+    description: String!
+    corporation: Corporation!
+}
+
+type TechnologyRelatedCorporationEdge {
+    node: TechnologyRelatedCorporation!
+    cursor: String!
+}
+
+type TechnologyRelatedCorporationConnection {
+    edges: [TechnologyRelatedCorporationEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type Technology {
+    id: BigInt!
+    name: String!
+    description: String!
+    news(pageParam: PageParam): NewsConnection!
+    corporations(pageParam: PageParam): TechnologyRelatedCorporationConnection!
+    patents(pageParam: PageParam): PatentConnection!
+}
+
+type TechnologyEdge {
+    node: Technology!
+    cursor: String!
+}
+
+type TechnologyConnection {
+    edges: [TechnologyEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type Query {
+    technology(id: BigInt!): Technology
+}

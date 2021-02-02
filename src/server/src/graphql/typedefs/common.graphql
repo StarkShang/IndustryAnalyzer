@@ -1,0 +1,36 @@
+scalar BigInt
+scalar NonNegativeInt
+scalar DateTime
+
+"""
+分页请求参数
+"""
+input PageParam {
+    """
+    分页请求中的每页数量，服务端限制最大值 30
+    """
+    first: NonNegativeInt! = 10
+
+    """
+    分页游标，以 base64 编码的字符串，空字符串表示从头开始
+    """
+    after: String! = ""
+}
+
+# 分页信息，作为分页请求返回对象的一部分
+"""
+分页信息，作为分页请求返回对象的一部分
+"""
+type PageInfo {
+    # 分页游标，本页中的最后一个元素的游标，以 base64 编码的字符串
+    """
+    分页游标，本页中的最后一个元素的游标，以 base64 编码的字符串
+    """
+    endCursor: String!
+
+    # 是否还有下一页
+    """
+    是否还有下一页
+    """
+    hasNextPage: Boolean!
+}

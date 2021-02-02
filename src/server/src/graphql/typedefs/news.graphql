@@ -1,0 +1,32 @@
+# import BigInt from "common.graphql"
+# import DateTime from "common.graphql"
+# import PageInfo from "common.graphql"
+
+type NewsLink {
+    id: BigInt!
+    url: String!
+    source: String!
+}
+
+type News {
+    id: BigInt!
+    title: String!
+    content: String!
+    date: DateTime!
+    links: [NewsLink!]!
+}
+
+type NewsEdge {
+    node: News!
+    cursor: String!
+}
+
+type NewsConnection {
+    edges: [NewsEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type Query {
+    news(id: BigInt!): News
+}

@@ -1,0 +1,10 @@
+type Country {
+    name: String!
+    en: String!
+    code: String!
+}
+
+type CountryStatistic {
+    country: String!
+    number: Int!
+}
