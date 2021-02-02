@@ -14,7 +14,9 @@
         "apollo-server-koa": "^2.19.2",
         "graphql": "^14.6.0",
         "graphql-tools": "^7.0.2",
-        "lodash": "^4.17.20"
+        "lodash": "^4.17.20",
+        "sequelize": "^6.5.0",
+        "sqlite3": "^5.0.1"
     },
     "devDependencies": {
         "@types/koa-router": "^7.4.1",
