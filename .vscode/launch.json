@@ -33,6 +33,33 @@
             "sourceMapPathOverrides": {
                 "webpack:///./src/*": "${webRoot}/*"
             }
+        },
+        {
+            "name": "Server: Start",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "server"
+            ],
+            "runtimeExecutable": "npm",
+            "cwd": "${workspaceFolder}/src/server",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        {
+            "name": "Front: Start",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "serve"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
         }
     ],
     "compounds": [
