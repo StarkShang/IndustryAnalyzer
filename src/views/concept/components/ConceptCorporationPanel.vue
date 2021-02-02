@@ -7,7 +7,10 @@
         <div>
             <connection-panel :connection="connection">
                 <template slot-scope="{ edge }">
-                    <concept-corporation-item :info="edge.node"></concept-corporation-item>
+                    <concept-corporation-item
+                        :info="edge.node"
+                        @select="handleCorporationSelected">
+                    </concept-corporation-item>
                 </template>
             </connection-panel>
         </div>
@@ -32,6 +35,10 @@ import ConceptCorporationItem from "@/common/components/ConceptCorporationItem.v
 export default class ConceptCorporationPanel extends Vue {
     @Prop({ default: () => [] }) public statistics!: CountryStatistic[];
     @Prop({ default: () => Connection.Default }) public connection!: Connection<ConceptRelatedCorporationInfo>;
+
+    public handleCorporationSelected(corporation: ConceptRelatedCorporationInfo): void {
+        this.$emit("select", corporation)
+    }
 }
 </script>
 

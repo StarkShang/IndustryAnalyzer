@@ -43,7 +43,7 @@ export default class Home extends Vue {
         concept1.id = 1;
         concept1.name = "虚拟现实";
         const concept2 = Concept.Empty;
-        concept2.id = 1;
+        concept2.id = 2;
         concept2.name = "MicroLED";
         this.concepts.append(concept1);
         this.concepts.append(concept2);

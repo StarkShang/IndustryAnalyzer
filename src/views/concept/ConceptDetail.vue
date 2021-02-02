@@ -12,13 +12,15 @@
                 </el-tab-pane>
                 <el-tab-pane label="关键技术" name="technologies">
                     <concept-technology-panel
-                        :connection="viewmodel.concept.technologies">
+                        :connection="viewmodel.concept.technologies"
+                        @select="handleTechnologySelected">
                     </concept-technology-panel>
                 </el-tab-pane>
                 <el-tab-pane label="龙头企业" name="corporations">
                     <concept-corporation-panel
                         :statistics="viewmodel.corporationStatistics"
-                        :connection="viewmodel.concept.corporations">
+                        :connection="viewmodel.concept.corporations"
+                        @select="handleCorporationSelected">
                     </concept-corporation-panel>
                 </el-tab-pane>
             </el-tabs>
@@ -69,6 +71,7 @@ export default class ConceptDetail extends Vue {
         this.viewmodel.corporationStatistics.push(data2);
 
         const tech1 = Technology.Empty;
+        tech1.id = 1;
         tech1.name = "倒装芯片专利技术";
         tech1.description = "简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术";
         const techCorp1 = TechnologyRelatedCorporationInfo.Empty;
@@ -76,21 +79,45 @@ export default class ConceptDetail extends Vue {
         techCorp1.corporation.country.code = "cn";
         tech1.corporations.append(techCorp1);
         const tech2 = Technology.Empty;
+        tech2.id = 2;
         tech2.name = "倒装芯片专利技术";
         tech2.description = "简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术";
         this.viewmodel.concept.technologies.append(tech1);
         this.viewmodel.concept.technologies.append(tech2);
 
         const corp1 = ConceptRelatedCorporationInfo.Empty;
+        corp1.id = 1;
         corp1.corporation = Corporation.Empty;
         corp1.corporation.name = "三星";
         corp1.description = "三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED";
         const corp2 = ConceptRelatedCorporationInfo.Empty;
+        corp2.id;
         corp2.corporation = Corporation.Empty;
         corp2.corporation.name = "三星";
         corp2.description = "三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED";
         this.viewmodel.concept.corporations.append(corp1);
         this.viewmodel.concept.corporations.append(corp1);
+    }
+
+    public handleTechnologySelected(technology: Technology): void {
+        if (!technology) { return; }
+
+        this.$router.push({
+            name: "TechnologyDetail",
+            params: { id: technology.id.toString() }
+        });
+    }
+
+    public handleCorporationSelected(corporation: ConceptRelatedCorporationInfo): void {
+        if (!corporation) { return }
+
+        this.$router.push({
+            name: "CorporationDetail",
+            params: {
+                id: this.viewmodel.concept.id.toString(),
+                corp: corporation.id.toString()
+            }
+        });
     }
 }
 </script>

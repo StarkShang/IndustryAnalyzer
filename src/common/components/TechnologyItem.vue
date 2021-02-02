@@ -1,7 +1,10 @@
 <template>
     <div class="technology-item">
         <div>
-            <span class="technology-name">{{ technology.name }}</span>
+            <span class="technology-name"
+                @click="handleTechnologyNameClicked">
+                {{ technology.name }}
+            </span>
         </div>
         <div class="technology-description">
             {{ technology.description }}
@@ -30,6 +33,10 @@ export default class TechnologyItem extends Vue{
         const corporations = this.technology.corporations.edges.map(edge => edge.node.corporation);
         return corporations;
     }
+
+    public handleTechnologyNameClicked(): void {
+        this.$emit("select", this.technology);
+    }
 }
 </script>
 
@@ -37,6 +44,7 @@ export default class TechnologyItem extends Vue{
 .technology-item {
     .technology-name {
         font-weight: bold;
+        cursor: pointer;
     }
     .technology-description {
         font-size: 0.8em;

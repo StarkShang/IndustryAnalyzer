@@ -6,7 +6,7 @@
         <div>
             <connection-panel :connection="connection">
                 <template slot-scope="{ edge }">
-                    <technology-item :technology="edge.node"></technology-item>
+                    <technology-item @select="handleTechnologySelected" :technology="edge.node"></technology-item>
                 </template>
             </connection-panel>
         </div>
@@ -30,6 +30,10 @@ import TechnologyItem from "@/common/components/TechnologyItem.vue";
 })
 export default class ConceptTechnologyPanel extends Vue {
     @Prop({ default: () => Connection.Default }) public connection!: Connection<Technology>;
+
+    public handleTechnologySelected(technology: Technology): void {
+        this.$emit("select", technology);
+    }
 }
 </script>
 

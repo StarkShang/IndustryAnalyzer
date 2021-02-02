@@ -1,7 +1,9 @@
 <template>
     <div class="concept-corporation-item">
         <div class="corporation-info">
-            <span class="corporation-name">{{ info.corporation.name }}</span>
+            <span class="corporation-name" @click="handleCorporationNameClicked">
+                {{ info.corporation.name }}
+            </span>
             <country-flag country="us" type="circle" class="corporation-country-flag"></country-flag>
         </div>
         <div>
@@ -19,6 +21,9 @@ import { ConceptRelatedCorporationInfo } from "../models";
 })
 export default class ConceptCorporationItem extends Vue{
     @Prop({ default: () => ConceptRelatedCorporationInfo.Empty }) public info!: ConceptRelatedCorporationInfo;
+    public handleCorporationNameClicked(): void {
+        this.$emit("select", this.info);
+    }
 }
 </script>
 
@@ -30,6 +35,7 @@ export default class ConceptCorporationItem extends Vue{
         align-items: center;
         .corporation-name {
             font-weight: bold;
+            cursor: pointer;
         }
         .corporation-country-flag {
             width: 0.8em;
