@@ -1,9 +1,16 @@
-import { Concept, Connection, PageParam } from "@/models";
+import { Concept, Connection, CreateConceptInput, PageParam } from "@/models";
+import { DbManager } from "@/repository/managers";
 
 export default {
     Query: {
         async concept() {
             return Concept.Empty;
+        }
+    },
+    Mutation: {
+        async createConcept(_: never, { input }: { input: CreateConceptInput }, { manager }: { manager: DbManager }) {
+            const concept = await manager.concept.create(input);
+            return concept.toJSON();
         }
     },
     Concept: {

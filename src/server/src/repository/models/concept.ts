@@ -11,15 +11,18 @@ export function init(sequelize: Sequelize) {
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
         },
         name: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
+          defaultValue: ""
         },
         description: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: true,
+          defaultValue: ""
         },
         ...Timestamp
       }, {

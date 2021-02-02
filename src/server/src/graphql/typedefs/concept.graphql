@@ -45,3 +45,12 @@ type ConceptConnection {
 type Query {
     concept(id: BigInt!): Concept
 }
+
+input CreateConceptInput {
+    name: String!
+    description: String
+}
+
+type Mutation {
+    createConcept(input: CreateConceptInput): Concept
+}

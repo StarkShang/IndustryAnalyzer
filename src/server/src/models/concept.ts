@@ -2,6 +2,11 @@ import { Connection } from "./connection";
 import { Corporation } from "./corporation";
 import { Technology } from "./technology";
 
+export interface CreateConceptInput {
+    name: string;
+    description: string;
+}
+
 export class ConceptRelatedCorporationInfo {
     public id = -1;
     public description = "";

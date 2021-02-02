@@ -1,22 +1,34 @@
 import path from "path";
 import fs from "fs";
 import { Sequelize } from "sequelize";
+import { ConceptManager, DbManager, TechnologyManager } from "./managers";
 
-const sequelize = new Sequelize({
-    dialect: "sqlite",
-    storage: "./database.sqlite",
-    logging: console.log
-});
+export { DbManager } from "./managers";
 
-const resolve = (dir: string) => path.join(__dirname, "models", dir);
-const modelFileNames = fs.readdirSync(resolve("."));
-modelFileNames.forEach(async filname => {
-    const { init } = await import(resolve(filname));
-    if (init) { init(sequelize); }
-});
-modelFileNames.forEach(async filname => {
-    const { associate } = await import(resolve(filname));
-    if (associate) { associate(); }
-});
+export default async (): Promise<DbManager> => {
+    const sequelize = new Sequelize({
+        dialect: "sqlite",
+        storage: "./database.sqlite",
+        logging: console.log
+    });
 
-export default sequelize;
+    const resolve = (dir: string) => path.join(__dirname, "models", dir);
+    const modelFileNames = fs.readdirSync(resolve("."));
+    modelFileNames.forEach(async filname => {
+        const { init } = await import(resolve(filname));
+        if (init) { init(sequelize); }
+    });
+    modelFileNames.forEach(async filname => {
+        const { associate } = await import(resolve(filname));
+        if (associate) { associate(); }
+    });
+    if (process.env.NODE_ENV === "development") {
+        await sequelize.sync({ force: true });
+    }
+
+    //
+    return {
+        concept: new ConceptManager(sequelize),
+        technology: new TechnologyManager(sequelize),
+    }
+}
