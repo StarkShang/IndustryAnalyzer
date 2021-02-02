@@ -1,6 +1,10 @@
 <template>
     <div class="home">
         <div>
+            <span>主页</span>
+            <el-button>新建</el-button>
+        </div>
+        <div>
             <div class="section-title">收藏</div>
             <span v-for="concept in recent" :key="concept.id"
                 class="recent-concept"
@@ -18,25 +22,36 @@
                 </template>
             </connection-panel>
         </div>
+
+        <concept-dialog
+            :visible.sync="viewmodel.conceptEditorVisible">
+        </concept-dialog>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Concept, Connection } from "@/common/models";
 import ConceptItem from "@/common/components/ConceptItem.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
-import { Concept, Connection } from "@/common/models";
+import ConceptEditor from "@/common/components/ConceptEditor.vue";
+
+class ViewModel {
+    public conceptEditorVisible = false;
+}
 
 @Component({
     name: "Home",
     components: {
         ConnectionPanel,
         ConceptItem,
+        ConceptEditor
     }
 })
 export default class Home extends Vue {
     public concepts: Connection<Concept> = Connection.Default;
     public recent: Concept[] = [];
+    public viewmodel = new ViewModel();
 
     public created(): void {
         const concept1 = Concept.Empty;
