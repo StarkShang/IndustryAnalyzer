@@ -5,6 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Server: Start",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "serve"
+            ],
+            "runtimeExecutable": "npm",
+            "cwd": "${workspaceFolder}/src/server",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        {
+            "name": "Front: Start",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "serve"
+            ],
+            "runtimeExecutable": "npm",
+            "cwd": "${workspaceFolder}/src/client",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        {
             "name": "Electron: Main",
             "type": "node",
             "request": "launch",
@@ -33,36 +61,16 @@
             "sourceMapPathOverrides": {
                 "webpack:///./src/*": "${webRoot}/*"
             }
-        },
-        {
-            "name": "Server: Start",
-            "request": "launch",
-            "runtimeArgs": [
-                "run-script",
-                "server"
-            ],
-            "runtimeExecutable": "npm",
-            "cwd": "${workspaceFolder}/src/server",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "pwa-node"
-        },
-        {
-            "name": "Front: Start",
-            "request": "launch",
-            "runtimeArgs": [
-                "run-script",
-                "serve"
-            ],
-            "runtimeExecutable": "npm",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "pwa-node"
         }
     ],
     "compounds": [
+        {
+            "name": "Dev: All",
+            "configurations": [
+                "Server: Start",
+                "Front: Start"
+            ]
+        },
         {
             "name": "Electron: All",
             "configurations": [
