@@ -6,11 +6,13 @@ function resolve(dir) {
 
 module.exports = {
     publicPath: "./",
+
     devServer: {
         // can be overwritten by process.env.HOST
         host: "0.0.0.0",
         port: 8081
     },
+
     chainWebpack: config => {
         config.resolve.alias
             .set("@", resolve("src"))
@@ -18,7 +20,17 @@ module.exports = {
             .set("common", resolve("src/common"))
             .set("components", resolve("src/components"));
     },
+
     configureWebpack: {
         devtool: "source-map"
+    },
+
+    pluginOptions: {
+        "style-resources-loader": {
+            preProcessor: "scss",
+            patterns: [
+                resolve("src/assets/sass/mixin.scss"),
+            ]
+        }
     }
 };
