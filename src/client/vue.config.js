@@ -29,7 +29,7 @@ module.exports = {
         "style-resources-loader": {
             preProcessor: "scss",
             patterns: [
-                resolve("src/assets/sass/mixin.scss"),
+                resolve("src/assets/sass/variables.scss"),
             ]
         }
     }

@@ -1,4 +1,29 @@
 .at-input {
     outline: none;
-    display: block;
+    border: none;
+    padding: 0 0.5em;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+    line-height: 2em;
+
+    & + .at-input {
+        margin-top: 1em;
+    }
+}
+
+input.at-input {
+
+    &:focus {
+        background-color: #ededed;
+    }
+}
+
+textarea.at-input {
+    resize: none;
+
+    &:focus {
+        background-color: #ededed;
+    }
 }

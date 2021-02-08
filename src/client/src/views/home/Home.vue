@@ -1,9 +1,6 @@
 <template>
     <div class="home">
         <div>
-            <input type="text" class="at-input">
-        </div>
-        <div>
             <span>主页</span>
             <el-button @click="openConceptEditor">新建</el-button>
         </div>
