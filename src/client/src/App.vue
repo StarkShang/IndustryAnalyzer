@@ -19,10 +19,13 @@ export default class Application extends Vue {}
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    margin-top: 60px;
+    margin-top: 80px;
 }
 </style>
 
 <style lang="scss">
 @import "assets/sass/mixin.scss";
+body {
+    margin: 0;
+}
 </style>

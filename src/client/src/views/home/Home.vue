@@ -1,11 +1,13 @@
 <template>
     <div class="home">
-        <div>
-            <span>主页</span>
-            <el-button @click="openConceptEditor">新建</el-button>
+        <div class="home-header">
+            <h3>主页</h3>
+            <span class="home-header-suffix">
+                <el-button size="mini" @click="openConceptEditor">新建</el-button>
+            </span>
         </div>
         <div>
-            <div class="section-title">收藏</div>
+            <div class="section-title">快速访问</div>
             <span v-for="concept in recent" :key="concept.id"
                 class="recent-concept"
                 @click="navigateToConceptDetail(concept)">
@@ -95,12 +97,15 @@ export default class Home extends Vue {
     .recent-concept {
         display: inline-block;
         padding: 0.5em;
-        background-color: rgba($color: #409EFF, $alpha: 0.3);
         border-radius: 2px;
-        border: solid 1px #409EFF;
+        border: solid 1px grey;
         font-weight: bold;
-        color: #409EFF;
+        color: grey;
         cursor: pointer;
+
+        &:hover {
+            border-color: #409EFF;
+        }
 
         & + .recent-concept {
             margin-left: 1em;
@@ -111,4 +116,13 @@ export default class Home extends Vue {
         margin-top: 1em;
     }
 }
+.home-header {
+    display: flex;
+    align-items: center;
+
+    .home-header-suffix {
+        margin-left: auto;
+    }
+}
+
 </style>
