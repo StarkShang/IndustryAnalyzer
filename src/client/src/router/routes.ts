@@ -19,6 +19,6 @@ export const routes: RouteConfig[] = [
     {
         path: "/concepts/:id",
         name: "ConceptDetail",
-        component: () => import("@/views/concept/ConceptDetail.vue"),
+        component: () => import("@/views/mindmap/Mindmap.vue"),
     }
 ];
