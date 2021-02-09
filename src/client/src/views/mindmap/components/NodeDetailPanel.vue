@@ -1,5 +1,25 @@
 <template>
-    <div ref="nodeDetailPanel" class="node-detail-panel">
+    <div ref="nodeDetailPanel" class="node-detail-panel" v-if="node">
+        <div class="node-detail-content">
+            <div v-if="tabInfos" class="tab-infos">
+                <span v-for="tabInfo in node.infos"
+                    class="tab-info"
+                    :key="tabInfo.key"
+                    :class="{ 'tab-info-active': tabInfo.key === currentTabInfo.key }"
+                    @click="changeTab(tabInfo)">
+                    {{ tabInfo.name }}
+                </span>
+            </div>
+            <div v-if="currentTabInfo">
+                <keep-alive>
+                    <component
+                        class=""
+                        :is="currentTabInfo.template"
+                        :data="currentTabInfo.data">
+                    </component>
+                </keep-alive>
+            </div>
+        </div>
         <div class="panel-resizer"
             @mousedown="startResize"
             @mouseup="stopResize">
@@ -8,21 +28,57 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { MindmapNode, NodeInfo } from "../models/Node";
+import { IMindmapNode } from "@attonex-private/mindmap";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import ConceptCorporationPanel from "@/common/components/ConceptCorporationPanel.vue";
+import TechnologyPanel from "@/common/components/TechnologyPanel.vue";
 
 class ViewModel {
-    resize = {
+    public resize = {
         enable: false,
         originWidth: 0,
         originMouseX: 0
-    }
+    };
 }
 
 @Component({
-    name: "NodeDetailPanel"
+    name: "NodeDetailPanel",
+    components: {
+        ConceptCorporationPanel,
+        TechnologyPanel
+    }
 })
 export default class NodeDetailPanel extends Vue {
+    @Prop({ default: () => null }) node: MindmapNode | null;
     public viewmodel = new ViewModel();
+    public currentTabInfo: NodeInfo | null = null;
+
+    public get tabInfos() {
+        if (this.node) {
+            if (Array.isArray(this.node.infos)) {
+                return this.node.infos;
+            }
+        }
+        return null;
+    }
+
+    @Watch("node")
+    public handleNodeChanged() {
+        if (!this.node) { return; }
+        if (Array.isArray(this.node.infos)) {
+            if (this.node.infos.length > 0) {
+                this.currentTabInfo = this.node.infos[0];
+            }
+        } else {
+            this.currentTabInfo = this.node.infos;
+        }
+    }
+
+    public changeTab(tabInfo: NodeInfo) {
+        console.log(tabInfo);
+        this.currentTabInfo = tabInfo;
+    }
 
     public startResize(event: MouseEvent) {
         this.viewmodel.resize.enable = true;
@@ -51,12 +107,51 @@ export default class NodeDetailPanel extends Vue {
 <style scoped lang="scss">
 .node-detail-panel {
     position: relative;
+    padding: 2em;
+    box-sizing: border-box;
+
+    .node-detail-content {
+        height: 100%;
+        display: flex;
+    }
+
+    .tab-infos {
+        margin-bottom: 1em;
+        font-size: 0.8em;
+        white-space: nowrap;
+        .tab-info {
+            cursor: pointer;
+            padding-bottom: 5px;
+            &:hover {
+                color: $active-color;
+            }
+            & + .tab-info {
+                margin-left: 0.5em;
+            }
+        }
+        .tab-info-active {
+            color: $active-color;
+            position: relative;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                width: 20px;
+                height: 2px;
+                background-color: $active-color;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    }
 
     .panel-resizer {
         position: absolute;
         left: 0;
+        top: 0;
+        bottom: 0;
         width: 3px;
-        height: 100%;
         cursor: w-resize;
     }
 }

@@ -6,7 +6,7 @@
             </span>
             <country-flag country="us" type="circle" class="corporation-country-flag"></country-flag>
         </div>
-        <div>
+        <div class="corporation-description">
             {{ info.description }}
         </div>
     </div>
@@ -44,6 +44,11 @@ export default class ConceptCorporationItem extends Vue{
         }
     }
 
+    .corporation-description {
+        font-size: 0.8em;
+        text-indent: 2em;
+        word-break: break-all;
+    }
 }
 .concept-corporation-item + .concept-corporation-item {
     margin-top: 1em;
