@@ -15,23 +15,32 @@
             </connection-panel>
         </div>
         <concept-corporation-editor :visible.sync="viewmodel.editor.visible"
-            @search="searchCorporations">
+            @search="searchCorporations"
+            @add="viewmodel.corporationEditor.visible=true">
         </concept-corporation-editor>
+        <corporation-editor
+            :visible.sync="viewmodel.corporationEditor.visible"
+            @confirm="handleCorporationCreated">
+        </corporation-editor>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { ConceptRelatedCorporationInfo, Connection, CountryStatistic } from "@/common/models";
+import { ConceptRelatedCorporationInfo, Connection, CountryStatistic, EditCorporationInput } from "@/common/models";
 import CountryStatisticsPanel from "@/common/components/CountryStatisticsPanel.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
 import ConceptCorporationItem from "@/common/components/ConceptCorporationItem.vue";
 import ConceptCorporationEditor from "@/common/components/dialogs/ConceptCorporationEditor.vue";
+import CorporationEditor from "@/common/components/dialogs/CorporationEditor.vue";
 
 class ViewModel {
     public editor = {
         visible: false
     };
+    public corporationEditor = {
+        visible: false
+    }
 }
 
 @Component({
@@ -41,6 +50,7 @@ class ViewModel {
         ConnectionPanel,
         ConceptCorporationItem,
         ConceptCorporationEditor,
+        CorporationEditor,
     }
 })
 export default class ConceptCorporationPanel extends Vue {
@@ -62,6 +72,10 @@ export default class ConceptCorporationPanel extends Vue {
 
     public handleCorporationSelected(corporation: ConceptRelatedCorporationInfo): void {
         this.$emit("select", corporation)
+    }
+
+    public handleCorporationCreated(input: EditCorporationInput) {
+        console.log(input);
     }
 }
 </script>

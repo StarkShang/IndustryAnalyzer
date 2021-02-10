@@ -27,7 +27,7 @@
                 class="mergeDialogSearchBtn">
             </el-button>
         </el-autocomplete>
-        <div class="addition-button">
+        <div class="addition-button" @click="addCorporation">
             +&nbsp;新增企业
         </div>
         <textarea class="at-input" type="text" placeholder="对企业进行简单描述" v-model="corporationDescription"></textarea>
@@ -106,6 +106,10 @@ export default class ConceptCorporationEditor extends Mixins(Vue, DialogMixin) {
         this.keyword = "";
         this.selectedCorporation = null;
         this.corporationDescription = "";
+    }
+
+    public addCorporation() {
+        this.$emit("add");
     }
 
     @Watch("visible")
