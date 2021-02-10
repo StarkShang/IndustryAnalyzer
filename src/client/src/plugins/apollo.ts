@@ -8,9 +8,9 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 Vue.use(VueApollo);
 
 // 创建 apollo 客户端
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
     link: createHttpLink({
-        uri: "http://localhost:3020/graphql",
+        uri: "http://localhost:4000/graphql",
     }),
     cache: new InMemoryCache(),
 })

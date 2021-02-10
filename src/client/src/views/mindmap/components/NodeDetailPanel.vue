@@ -29,7 +29,6 @@
 
 <script lang="ts">
 import { MindmapNode, NodeInfo } from "../models/Node";
-import { IMindmapNode } from "@attonex-private/mindmap";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import ConceptCorporationPanel from "./node-panel/ConceptCorporationPanel.vue";
 import TechnologyPanel from "./node-panel/TechnologyPanel.vue";
@@ -50,11 +49,11 @@ class ViewModel {
     }
 })
 export default class NodeDetailPanel extends Vue {
-    @Prop({ default: () => null }) node: MindmapNode | null;
+    @Prop({ default: () => null }) node!: MindmapNode | null;
     public viewmodel = new ViewModel();
     public currentTabInfo: NodeInfo | null = null;
 
-    public get tabInfos() {
+    public get tabInfos(): NodeInfo[] | null {
         if (this.node) {
             if (Array.isArray(this.node.infos)) {
                 return this.node.infos;
@@ -64,39 +63,43 @@ export default class NodeDetailPanel extends Vue {
     }
 
     @Watch("node")
-    public handleNodeChanged() {
+    public handleNodeChanged(): void {
         if (!this.node) { return; }
         if (Array.isArray(this.node.infos)) {
             if (this.node.infos.length > 0) {
                 this.currentTabInfo = this.node.infos[0];
             }
         } else {
-            this.currentTabInfo = this.node.infos;
+            if (this.node.infos) {
+                this.currentTabInfo = this.node.infos;
+            }
         }
     }
 
-    public changeTab(tabInfo: NodeInfo) {
+    public changeTab(tabInfo: NodeInfo): void {
         console.log(tabInfo);
         this.currentTabInfo = tabInfo;
     }
 
-    public startResize(event: MouseEvent) {
+    public startResize(event: MouseEvent): void {
         this.viewmodel.resize.enable = true;
         const panel = this.$refs["nodeDetailPanel"] as HTMLDivElement;
         const originWidth = /\d+(?=px)/.exec(window.getComputedStyle(panel).width);
-        this.viewmodel.resize.originWidth = parseInt(originWidth[0]);
-        this.viewmodel.resize.originMouseX = event.clientX;
-        document.addEventListener("mousemove", this.resizePanel);
-        document.addEventListener("mouseup", this.stopResize);
+        if (originWidth) {
+            this.viewmodel.resize.originWidth = parseInt(originWidth[0]);
+            this.viewmodel.resize.originMouseX = event.clientX;
+            document.addEventListener("mousemove", this.resizePanel);
+            document.addEventListener("mouseup", this.stopResize);
+        }
     }
 
-    public resizePanel(event: MouseEvent) {
+    public resizePanel(event: MouseEvent): void {
         const moveDistance = event.clientX - this.viewmodel.resize.originMouseX;
         const panel = this.$refs["nodeDetailPanel"] as HTMLDivElement;
         panel.style.width = this.viewmodel.resize.originWidth - moveDistance + "px";
     }
 
-    public stopResize(event: MouseEvent) {
+    public stopResize(): void {
         this.viewmodel.resize.enable = false;
         document.removeEventListener("mousemove", this.resizePanel);
         document.removeEventListener("mouseup", this.stopResize);

@@ -9,3 +9,9 @@ export class Corporation {
         return new Corporation();
     }
 }
+
+export interface CreateOrUpdateCorporationInput {
+    id?: number;
+    name: string;
+    country: string;
+}

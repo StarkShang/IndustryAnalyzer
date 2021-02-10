@@ -1,0 +1,11 @@
+mutation ($input: CreateOrUpdateCorporationInput!) {
+    createOrUpdateCorporation(input: $input) {
+        id,
+        name,
+        country {
+            name,
+            en,
+            code,
+        }
+    }
+}

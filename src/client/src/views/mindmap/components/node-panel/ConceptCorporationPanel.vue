@@ -27,12 +27,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { ConceptRelatedCorporationInfo, Connection, CountryStatistic, EditCorporationInput } from "@/common/models";
+import { ConceptRelatedCorporationInfo, Connection, Corporation, Country, CountryStatistic, EditCorporationInput } from "@/common/models";
 import CountryStatisticsPanel from "@/common/components/CountryStatisticsPanel.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
 import ConceptCorporationItem from "@/common/components/ConceptCorporationItem.vue";
 import ConceptCorporationEditor from "@/common/components/dialogs/ConceptCorporationEditor.vue";
 import CorporationEditor from "@/common/components/dialogs/CorporationEditor.vue";
+import { createOrUpdateCorporation } from "../../graphql";
 
 class ViewModel {
     public editor = {
@@ -62,11 +63,11 @@ export default class ConceptCorporationPanel extends Vue {
     }) public data!: { statistics: CountryStatistic[], connection: Connection<ConceptRelatedCorporationInfo> }
     public viewmodel = new ViewModel();
 
-    public searchCorporations(queryString: string, callback: (data: any) => void) {
+    public searchCorporations(queryString: string, callback: (data: Corporation[]) => void): void {
         callback([{
             id: 1,
             name: "123",
-            description: "123edsadds"
+            country: Country.Empty
         }]);
     }
 
@@ -74,8 +75,16 @@ export default class ConceptCorporationPanel extends Vue {
         this.$emit("select", corporation)
     }
 
-    public handleCorporationCreated(input: EditCorporationInput) {
-        console.log(input);
+    public async handleCorporationCreated(input: EditCorporationInput): Promise<void> {
+        if (!input.country) {
+            return;
+        }
+        const response = await createOrUpdateCorporation({
+            id: input.id,
+            name: input.name,
+            country: input.country.code
+        });
+        console.log(response);
     }
 }
 </script>

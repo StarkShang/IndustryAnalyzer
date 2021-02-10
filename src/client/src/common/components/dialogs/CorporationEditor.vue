@@ -42,7 +42,7 @@ export default class CorporationEditor extends Mixins(Vue, DialogMixin) {
         return !!this.form.name && !!this.form.country;
     }
 
-    public created() {
+    public created(): void {
         if (this.corporation) {
             this.form.id = this.corporation.id;
             this.form.name = this.corporation.name;
@@ -51,11 +51,11 @@ export default class CorporationEditor extends Mixins(Vue, DialogMixin) {
         }
     }
 
-    public handleCountrySelected(country: Country) {
+    public handleCountrySelected(country: Country): void {
         this.form.country = country;
     }
 
-    public handleConfirmEdit() {
+    public handleConfirmEdit(): void {
         this.$emit("confirm", this.form);
         this.closeDialog();
         this.form = EditCorporationInput.Empty;

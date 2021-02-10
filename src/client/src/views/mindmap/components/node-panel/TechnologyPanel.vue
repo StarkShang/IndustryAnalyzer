@@ -59,11 +59,14 @@ export default class TechnologyPanel extends Vue {
     @Prop({ default: () => Connection.Default }) public data!: Connection<Technology>;
     public viewmodel = new ViewModel();
 
-    public searchTechnologies(queryString: string, callback: (data: any) => void) {
+    public searchTechnologies(queryString: string, callback: (data: Technology[]) => void): void {
         callback([{
             id: 1,
             name: "123",
-            description: "123edsadds"
+            description: "123edsadds",
+            news: Connection.Empty,
+            corporations: Connection.Empty,
+            patents: Connection.Empty
         }]);
     }
 

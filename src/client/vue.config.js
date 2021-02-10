@@ -31,6 +31,9 @@ module.exports = {
             patterns: [
                 resolve("src/assets/sass/variables.scss"),
             ]
+        },
+        apollo: {
+            lintGQL: true
         }
     }
 };

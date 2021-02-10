@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Mindmap, IMindmapNodeData, IMindmapNode } from "@attonex-private/mindmap";
+import { Mindmap, IMindmapNodeData } from "@attonex-private/mindmap";
 import { createMindmapOption } from "./utils/configuration";
 import NodeDetailPanel from "./components/NodeDetailPanel.vue";
 import { MindmapNode } from "./models/Node";
@@ -21,7 +21,7 @@ import { INode } from "@antv/g6/lib/interface/item";
     }
 })
 export default class MindmapPage extends Vue {
-    public mindmap: Mindmap!;
+    public mindmap!: Mindmap;
     public selectedNode: MindmapNode | null = null;
 
     public mounted(): void {
@@ -37,24 +37,24 @@ export default class MindmapPage extends Vue {
 
     private async initMindmapData() {
         const mindmapData: IMindmapNodeData = {
-            id: 1,
+            id: "1",
             label: "虚拟现实",
             children: [{
-                id: 2,
+                id: "2",
                 label: "竞品分析",
                 infos: {
                     template: "ConceptCorporationPanel",
                 },
                 children: []
             }, {
-                id: 3,
+                id: "3",
                 label: "关键技术",
                 infos: {
                     template: "TechnologyPanel",
                     data: {
                         edges: [{
                             node: {
-                                id: 1,
+                                id: "1",
                                 name: "倒装芯片专利技术",
                                 description: "简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术",
                                 corporations: {
@@ -72,7 +72,7 @@ export default class MindmapPage extends Vue {
                             }
                         }, {
                             node: {
-                                id: 2,
+                                id: "2",
                                 name: "倒装芯片专利技术",
                                 description: "简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术简述倒装芯片技术",
                                 corporations: {
@@ -93,7 +93,7 @@ export default class MindmapPage extends Vue {
                 },
                 children: []
             }, {
-                id: 4,
+                id: "4",
                 label: "龙头企业",
                 infos: {
                     template: "ConceptCorporationPanel",
@@ -108,7 +108,7 @@ export default class MindmapPage extends Vue {
                         connection: {
                             edges: [{
                                 node: {
-                                    id: 1,
+                                    id: "1",
                                     description: "三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED",
                                     corporation: {
                                         name: "三星",
@@ -116,7 +116,7 @@ export default class MindmapPage extends Vue {
                                 }
                             }, {
                                 node: {
-                                    id: 2,
+                                    id: "2",
                                     description: "三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED三星发力MicroLED",
                                     corporation: {
                                         name: "三星",
@@ -139,7 +139,7 @@ export default class MindmapPage extends Vue {
         if (!this.mindmap) { return; }
 
         this.mindmap.on("node:selected", (node: INode) => {
-            this.selectedNode = node.getModel();
+            this.selectedNode = node.getModel() as MindmapNode;
         });
     }
 }

@@ -1,4 +1,4 @@
-import { Corporation } from "@/models";
+import { Corporation, CreateOrUpdateCorporationInput } from "@/models";
 
 export default {
     Query: {
@@ -6,4 +6,9 @@ export default {
             return Corporation.Empty;
         }
     },
+    Mutation: {
+        async createOrUpdateCorporation(_: never, { input }: { input: CreateOrUpdateCorporationInput }) {
+            console.log(input);
+        }
+    }
 };

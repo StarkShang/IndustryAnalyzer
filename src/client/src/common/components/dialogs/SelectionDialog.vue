@@ -64,24 +64,24 @@ import DialogMixin from "./dialog";
     name: "SelectionDialog"
 })
 export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
-    @Prop({ default: () => "选择对象" }) public title: string;
-    @Prop({ default: () => "请输入内容" }) public placeholder: string;
-    @Prop({ default: true }) public multiple: boolean;
+    @Prop({ default: () => "选择对象" }) public title!: string;
+    @Prop({ default: () => "请输入内容" }) public placeholder!: string;
+    @Prop({ default: true }) public multiple!: boolean;
     @Prop({ default: "name" }) public valueKey!: string;
     public keyword = "";
-    public resultList: Array<any> = [];
+    public resultList: { value: string }[] = [];
 
-    public searchItems(queryString: string, callback) {
+    public searchItems(queryString: string, callback: (data: unknown[]) => void): void {
         this.$emit("search", queryString, callback);
     }
 
-    public handleRemove(index: number) {
+    public handleRemove(index: number): void {
         if (index >= 0 && index < this.resultList.length) {
             this.resultList.splice(index, 1);
         }
     }
 
-    public handleSelect(item) {
+    public handleSelect(item: { value: string }): void {
         if (this.multiple) {
             const index = this.resultList.findIndex(e => e.value === item.value);
             if (index === -1) {
@@ -96,7 +96,7 @@ export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
     }
 
     @Watch("visible")
-    public handleVisibilityChange() {
+    public handleVisibilityChange(): void {
         if (!this.visible) {
             this.keyword = ""; // 清除keyword
         } else {
@@ -108,12 +108,12 @@ export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
 
     // 确认的时候可能需要进行校验
     // 因此吧关闭对话框的权限移交给调用者
-    public confirmSelection() {
+    public confirmSelection(): void {
         this.$emit("confirm", this.resultList);
         this.closeDialog();
     }
 
-    public closeDialog() {
+    public closeDialog(): void {
         this.resultList = [];
         this.$emit("update:visible", false);
     }

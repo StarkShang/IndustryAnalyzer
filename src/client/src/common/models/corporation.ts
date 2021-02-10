@@ -10,6 +10,12 @@ export class EditCorporationInput {
     }
 }
 
+export interface CreateOrUpdateCorporationInput {
+    id?: number;
+    name: string;
+    country: string;
+}
+
 export class Corporation {
     public id = -1;
     public name = "";

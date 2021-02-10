@@ -7,6 +7,16 @@ type Corporation {
     country: Country!
 }
 
+input CreateOrUpdateCorporationInput {
+    id: BigInt
+    name: String!
+    country: String!
+}
+
 type Query {
     corporation(id: BigInt!): Corporation
+}
+
+type Mutation {
+    createOrUpdateCorporation(input: CreateOrUpdateCorporationInput): Corporation
 }

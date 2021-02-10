@@ -82,22 +82,23 @@ export default class ConceptCorporationEditor extends Mixins(Vue, DialogMixin) {
         return !!this.selectedCorporation && !!this.corporationDescription;
     }
 
-    public searchItems(queryString: string, callback) {
+    public searchItems(queryString: string, callback: (data: never) => void): void {
         this.$emit("search", queryString, callback);
     }
 
-    public handleRemove(index: number) {
+    public handleRemove(index: number): void {
         if (index >= 0 && index < this.candidates.length) {
             this.candidates.splice(index, 1);
         }
     }
 
-    public handleSelect(corporation: Corporation) {
+    public handleSelect(corporation: Corporation): void {
         this.keyword = corporation.name;
         this.selectedCorporation = corporation;
     }
 
-    public addToCandidates() {
+    public addToCandidates(): void {
+        if (!this.selectedCorporation) { return; }
         const info = new ConceptRelatedCorporationInfo(this.corporationDescription, this.selectedCorporation);
         const index = this.candidates.findIndex(e => e.corporation.id === info.corporation.id);
         if (index === -1) {
@@ -108,12 +109,12 @@ export default class ConceptCorporationEditor extends Mixins(Vue, DialogMixin) {
         this.corporationDescription = "";
     }
 
-    public addCorporation() {
+    public addCorporation(): void {
         this.$emit("add");
     }
 
     @Watch("visible")
-    public handleVisibilityChange() {
+    public handleVisibilityChange(): void {
         if (!this.visible) {
             this.keyword = ""; // 清除keyword
         } else {
@@ -125,12 +126,12 @@ export default class ConceptCorporationEditor extends Mixins(Vue, DialogMixin) {
 
     // 确认的时候可能需要进行校验
     // 因此吧关闭对话框的权限移交给调用者
-    public confirmSelection() {
+    public confirmSelection(): void {
         this.$emit("confirm", this.candidates);
         this.closeDialog();
     }
 
-    public closeDialog() {
+    public closeDialog(): void {
         this.candidates = [];
         this.$emit("update:visible", false);
     }

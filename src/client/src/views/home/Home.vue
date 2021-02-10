@@ -77,7 +77,7 @@ export default class Home extends Vue {
         }
     }
 
-    public openConceptEditor() {
+    public openConceptEditor(): void {
         this.viewmodel.conceptEditorVisible = true;
     }
 }
