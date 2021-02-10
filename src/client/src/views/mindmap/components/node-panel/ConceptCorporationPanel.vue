@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="concept-corporation-panel">
         <div class="corporation-overview">
             <country-statistics-panel :statistics="data.statistics"></country-statistics-panel>
             <button>增加相关企业信息</button>
         </div>
-        <div>
+        <div class="corporation-list">
             <connection-panel :connection="data.connection">
                 <template slot-scope="{ edge }">
                     <concept-corporation-item
@@ -47,10 +47,19 @@ export default class ConceptCorporationPanel extends Vue {
 </script>
 
 <style scoped lang="scss">
-.corporation-overview {
+.concept-corporation-panel {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1em;
+    flex-direction: column;
+    .corporation-overview {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1em;
+    }
+    .corporation-list {
+        flex: 1;
+        overflow-y: auto;
+    }
 }
 </style>

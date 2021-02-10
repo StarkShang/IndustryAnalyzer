@@ -10,7 +10,7 @@
                     {{ tabInfo.name }}
                 </span>
             </div>
-            <div v-if="currentTabInfo">
+            <template v-if="currentTabInfo">
                 <keep-alive>
                     <component
                         class=""
@@ -18,7 +18,7 @@
                         :data="currentTabInfo.data">
                     </component>
                 </keep-alive>
-            </div>
+            </template>
         </div>
         <div class="panel-resizer"
             @mousedown="startResize"
@@ -31,8 +31,8 @@
 import { MindmapNode, NodeInfo } from "../models/Node";
 import { IMindmapNode } from "@attonex-private/mindmap";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import ConceptCorporationPanel from "@/common/components/ConceptCorporationPanel.vue";
-import TechnologyPanel from "@/common/components/TechnologyPanel.vue";
+import ConceptCorporationPanel from "./node-panel/ConceptCorporationPanel.vue";
+import TechnologyPanel from "./node-panel/TechnologyPanel.vue";
 
 class ViewModel {
     public resize = {
@@ -107,7 +107,7 @@ export default class NodeDetailPanel extends Vue {
 <style scoped lang="scss">
 .node-detail-panel {
     position: relative;
-    padding: 2em;
+    padding: 0.5em 1em;
     box-sizing: border-box;
 
     .node-detail-content {
