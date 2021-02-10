@@ -4,8 +4,10 @@ import { Technology } from "./technology";
 
 export class ConceptRelatedCorporationInfo {
     public id = -1;
-    public description = "";
-    public corporation = Corporation.Empty;
+
+    public constructor(
+        public description = "",
+        public corporation = Corporation.Empty) { }
 
     public static get Empty(): ConceptRelatedCorporationInfo {
         return new ConceptRelatedCorporationInfo();

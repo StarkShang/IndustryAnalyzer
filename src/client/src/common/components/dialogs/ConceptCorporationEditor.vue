@@ -1,11 +1,10 @@
 <template>
     <el-dialog
         class="select-dialog commonDialog"
-        :title="title"
-        :visible="visible"
-        :close-on-click-modal="false"
-        @update:visible="closeDialog"
+        title="新增相关企业"
         width="500px"
+        :visible.sync="visible"
+        :close-on-click-modal="false"
         :show-close="false"
         :append-to-body="true">
         <el-autocomplete
@@ -13,12 +12,14 @@
             ref="keywordInput"
             class="search-input"
             size="mini"
+            placeholder="搜索企业"
             :fetch-suggestions="searchItems"
-            :placeholder="placeholder"
             :trigger-on-focus="false"
             @select="handleSelect">
             <template slot-scope="{ item }">
-                <slot :item="item"></slot>
+                <div>
+                    {{ item.name }}
+                </div>
             </template>
             <el-button
                 slot="append"
@@ -26,26 +27,32 @@
                 class="mergeDialogSearchBtn">
             </el-button>
         </el-autocomplete>
-        <div>
-            <slot name="addition"></slot>
+        <div class="addition-button">
+            +&nbsp;新增企业
         </div>
+        <textarea class="at-input" type="text" placeholder="对企业进行简单描述" v-model="corporationDescription"></textarea>
 
-        <div v-if="multiple" class="listContainer">
+        <div class="listContainer">
             <div class="item"
                 :key="index"
-                v-for="(item, index) in resultList">
+                v-for="(item, index) in candidates">
                 <div class="left">
                     <i class="el-icon-close" @click="handleRemove(index)"></i>
                 </div>
                 <div class="right">
-                    <span>{{ item[valueKey] }}</span>
+                    <span>{{ item.corporation.name }}</span>
                 </div>
             </div>
         </div>
 
-        <div v-if="multiple" class="btnGroup">
+        <div class="btnGroup">
             <el-button type="primary" size="mini"
-                :disabled="resultList.length < 1"
+                :disabled="!canAddToCandidates"
+                @click="addToCandidates">
+                添加
+            </el-button>
+            <el-button type="primary" size="mini"
+                :disabled="candidates.length < 1"
                 @click="confirmSelection">
                 确定
             </el-button>
@@ -57,42 +64,48 @@
 </template>
 
 <script lang="ts">
+import { ConceptRelatedCorporationInfo, Corporation } from "@/common/models";
 import { Component, Mixins, Prop, Vue, Watch } from "vue-property-decorator";
 import DialogMixin from "./dialog";
 
 @Component({
-    name: "SelectionDialog"
+    name: "ConceptCorporationEditor"
 })
-export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
-    @Prop({ default: () => "选择对象" }) public title: string;
-    @Prop({ default: () => "请输入内容" }) public placeholder: string;
-    @Prop({ default: true }) public multiple: boolean;
+export default class ConceptCorporationEditor extends Mixins(Vue, DialogMixin) {
     @Prop({ default: "name" }) public valueKey!: string;
     public keyword = "";
-    public resultList: Array<any> = [];
+    public selectedCorporation: Corporation | null = null;
+    public corporationDescription = "";
+    public candidates: Array<ConceptRelatedCorporationInfo> = [];
+
+    public get canAddToCandidates(): boolean {
+        return !!this.selectedCorporation && !!this.corporationDescription;
+    }
 
     public searchItems(queryString: string, callback) {
         this.$emit("search", queryString, callback);
     }
 
     public handleRemove(index: number) {
-        if (index >= 0 && index < this.resultList.length) {
-            this.resultList.splice(index, 1);
+        if (index >= 0 && index < this.candidates.length) {
+            this.candidates.splice(index, 1);
         }
     }
 
-    public handleSelect(item) {
-        if (this.multiple) {
-            const index = this.resultList.findIndex(e => e.value === item.value);
-            if (index === -1) {
-                this.resultList.push(item);
-            }
+    public handleSelect(corporation: Corporation) {
+        this.keyword = corporation.name;
+        this.selectedCorporation = corporation;
+    }
 
-            this.keyword = "";
-        } else {
-            this.$emit("confirm", item);
-            this.closeDialog();
+    public addToCandidates() {
+        const info = new ConceptRelatedCorporationInfo(this.corporationDescription, this.selectedCorporation);
+        const index = this.candidates.findIndex(e => e.corporation.id === info.corporation.id);
+        if (index === -1) {
+            this.candidates.push(info);
         }
+        this.keyword = "";
+        this.selectedCorporation = null;
+        this.corporationDescription = "";
     }
 
     @Watch("visible")
@@ -109,12 +122,12 @@ export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
     // 确认的时候可能需要进行校验
     // 因此吧关闭对话框的权限移交给调用者
     public confirmSelection() {
-        this.$emit("confirm", this.resultList);
+        this.$emit("confirm", this.candidates);
         this.closeDialog();
     }
 
     public closeDialog() {
-        this.resultList = [];
+        this.candidates = [];
         this.$emit("update:visible", false);
     }
 }
@@ -128,9 +141,10 @@ export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
     }
 }
 
-.search-input {
-    width: 100%;
-    margin-bottom: 0.5em;
+.addition-button {
+    cursor: pointer;
+    color: $active-color;
+    font-size: 0.8em;
 }
 
 .listContainer {
@@ -147,6 +161,11 @@ export default class SelectionDialog extends Mixins(Vue, DialogMixin) {
             opacity: 1;
         }
     }
+}
+
+.search-input {
+    width: 100%;
+    margin-bottom: 0.5em;
 }
 
 .btnGroup {

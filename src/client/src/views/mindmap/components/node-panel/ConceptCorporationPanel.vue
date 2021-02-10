@@ -2,7 +2,7 @@
     <div class="concept-corporation-panel">
         <div class="corporation-overview">
             <country-statistics-panel :statistics="data.statistics"></country-statistics-panel>
-            <button>增加相关企业信息</button>
+            <button @click="viewmodel.editor.visible=true">增加相关企业信息</button>
         </div>
         <div class="corporation-list">
             <connection-panel :connection="data.connection">
@@ -14,6 +14,9 @@
                 </template>
             </connection-panel>
         </div>
+        <concept-corporation-editor :visible.sync="viewmodel.editor.visible"
+            @search="searchCorporations">
+        </concept-corporation-editor>
     </div>
 </template>
 
@@ -23,6 +26,13 @@ import { ConceptRelatedCorporationInfo, Connection, CountryStatistic } from "@/c
 import CountryStatisticsPanel from "@/common/components/CountryStatisticsPanel.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
 import ConceptCorporationItem from "@/common/components/ConceptCorporationItem.vue";
+import ConceptCorporationEditor from "@/common/components/dialogs/ConceptCorporationEditor.vue";
+
+class ViewModel {
+    public editor = {
+        visible: false
+    };
+}
 
 @Component({
     name: "ConceptCorporationPanel",
@@ -30,6 +40,7 @@ import ConceptCorporationItem from "@/common/components/ConceptCorporationItem.v
         CountryStatisticsPanel,
         ConnectionPanel,
         ConceptCorporationItem,
+        ConceptCorporationEditor,
     }
 })
 export default class ConceptCorporationPanel extends Vue {
@@ -39,6 +50,15 @@ export default class ConceptCorporationPanel extends Vue {
             connection: Connection.Default
         })
     }) public data!: { statistics: CountryStatistic[], connection: Connection<ConceptRelatedCorporationInfo> }
+    public viewmodel = new ViewModel();
+
+    public searchCorporations(queryString: string, callback: (data: any) => void) {
+        callback([{
+            id: 1,
+            name: "123",
+            description: "123edsadds"
+        }]);
+    }
 
     public handleCorporationSelected(corporation: ConceptRelatedCorporationInfo): void {
         this.$emit("select", corporation)
