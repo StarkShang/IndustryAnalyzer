@@ -1,10 +1,10 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { Technology } from "./technology";
-import { Corporation } from "./corporation";
+import { CorporationEntity } from "./corporation";
 import Timestamp from "./timestamp";
 
-export class Concept extends Model {}
-export class ConceptRelatedCorporation extends Model {}
+export class Concept extends Model { }
+export class ConceptRelatedCorporation extends Model { }
 
 export function init(sequelize: Sequelize) {
     Concept.init({
@@ -15,17 +15,17 @@ export function init(sequelize: Sequelize) {
             autoIncrement: true,
         },
         name: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          defaultValue: ""
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: ""
         },
         description: {
-          type: DataTypes.STRING,
-          allowNull: true,
-          defaultValue: ""
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: ""
         },
         ...Timestamp
-      }, {
+    }, {
         sequelize,
         modelName: "concept",
     });
@@ -49,5 +49,5 @@ export function associate() {
     Concept.hasMany(Technology);
     Concept.hasMany(Concept);
     Concept.hasMany(ConceptRelatedCorporation);
-    ConceptRelatedCorporation.hasOne(Corporation);
+    ConceptRelatedCorporation.hasOne(CorporationEntity);
 }

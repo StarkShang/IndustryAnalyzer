@@ -15,3 +15,20 @@ export interface CreateOrUpdateCorporationInput {
     name: string;
     country: string;
 }
+
+export interface CreateCorporationInput {
+    name: string;
+    country: string;
+}
+
+export interface UpdateCorporationInput {
+    id: number;
+    name: string;
+    country: string;
+}
+
+export interface CorporationEntity {
+    id: number;
+    name: string;
+    country: string;
+}

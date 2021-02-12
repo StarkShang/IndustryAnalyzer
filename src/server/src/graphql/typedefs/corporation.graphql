@@ -18,5 +18,5 @@ type Query {
 }
 
 type Mutation {
-    createOrUpdateCorporation(input: CreateOrUpdateCorporationInput): Corporation
+    createOrUpdateCorporation(input: CreateOrUpdateCorporationInput): Corporation!
 }

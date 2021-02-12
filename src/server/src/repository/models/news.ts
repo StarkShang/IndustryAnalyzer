@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 import Timestamp from "./timestamp";
 
-export class News extends Model {}
+export class News extends Model { }
 
 export function init(sequelize: Sequelize) {
     News.init({
@@ -11,19 +11,19 @@ export function init(sequelize: Sequelize) {
             primaryKey: true
         },
         title: {
-          type: DataTypes.STRING,
-          allowNull: false
+            type: DataTypes.STRING,
+            allowNull: false
         },
         content: {
-          type: DataTypes.STRING,
-          allowNull: false
+            type: DataTypes.STRING,
+            allowNull: false
         },
         date: {
-          type: DataTypes.DATE,
-          allowNull: false
+            type: DataTypes.DATE,
+            allowNull: false
         },
         ...Timestamp
-      }, {
+    }, {
         sequelize,
         modelName: "news",
     });

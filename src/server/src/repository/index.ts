@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { Sequelize } from "sequelize";
-import { ConceptManager, DbManager, TechnologyManager } from "./managers";
+import { ConceptManager, CorporationManager, CountryManager, DbManager, TechnologyManager } from "./managers";
 
 export { DbManager } from "./managers";
 
@@ -28,7 +28,9 @@ export default async (): Promise<DbManager> => {
 
     //
     return {
+        country: new CountryManager(),
         concept: new ConceptManager(sequelize),
+        corporation: new CorporationManager(sequelize),
         technology: new TechnologyManager(sequelize),
     }
 }

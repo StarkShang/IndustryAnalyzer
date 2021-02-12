@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { Corporation } from "./corporation";
+import { CorporationEntity } from "./corporation";
 import Timestamp from "./timestamp";
 
 export class Patent extends Model {}
@@ -35,5 +35,5 @@ export function init(sequelize: Sequelize) {
 }
 
 export function associate() {
-    Patent.hasOne(Corporation);
+    Patent.hasOne(CorporationEntity);
 }
