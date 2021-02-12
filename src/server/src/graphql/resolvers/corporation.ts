@@ -1,4 +1,4 @@
-import { Corporation, CorporationEntity, CreateOrUpdateCorporationInput } from "@/models";
+import { Connection, Corporation, CorporationEntity, CreateOrUpdateCorporationInput, PageParam } from "@/models";
 import { DbManager } from "@/repository";
 
 export default {
@@ -15,10 +15,23 @@ export default {
         async corporation(
             _: never,
             { id }: { id: number },
-            { manager }: { manager: DbManager }):
-            Promise<Corporation | null>
-        {
+            { manager }: { manager: DbManager }
+        ): Promise<Corporation | null> {
             return await manager.corporation.findById(id);
+        },
+        async corporations(
+            _: never,
+            { pageParam }: { pageParam: PageParam },
+            { manager }: { manager: DbManager }
+        ) {
+            return await manager.corporation.get(pageParam);
+        },
+        async searchCorporation(
+            _: never,
+            { keyword, pageParam }: { keyword: string, pageParam: PageParam },
+            { manager }: { manager: DbManager }
+        ) {
+            return await manager.corporation.search(keyword, pageParam);
         }
     },
     Mutation: {

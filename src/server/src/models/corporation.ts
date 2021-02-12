@@ -31,4 +31,6 @@ export interface CorporationEntity {
     id: number;
     name: string;
     country: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

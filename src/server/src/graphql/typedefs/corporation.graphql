@@ -1,4 +1,6 @@
 # import BigInt from "common.graphql"
+# import PageInfo from "common.graphql"
+# import PageParam from "common.graphql"
 # import Country from "country.graphql"
 
 type Corporation {
@@ -13,8 +15,21 @@ input CreateOrUpdateCorporationInput {
     country: String!
 }
 
+type CorporationEdge {
+    node: Corporation!
+    cursor: String!
+}
+
+type CorporationConnection {
+    edges: [CorporationEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
 type Query {
     corporation(id: BigInt!): Corporation
+    corporations(pageParam: PageParam): CorporationConnection!
+    searchCorporation(keyword: String, pageParam: PageParam): CorporationConnection!
 }
 
 type Mutation {

@@ -1,5 +1,7 @@
-import { Corporation, CreateCorporationInput, UpdateCorporationInput } from "@/models";
+import { Op } from "sequelize";
+import { Connection, Corporation, CreateCorporationInput, PageParam, UpdateCorporationInput } from "@/models";
 import { CorporationEntity } from "../models/corporation";
+import { parseTimeStampCursor } from "../utils/cursor";
 import { DbManager } from "./manager";
 
 export class CorporationManager extends DbManager {
@@ -23,5 +25,42 @@ export class CorporationManager extends DbManager {
         } else {
             throw new Error();
         }
+    }
+
+    public async get(page: PageParam): Promise<Connection<CorporationEntity>> {
+        const { first, after } = page;
+        const afterCursor = parseTimeStampCursor(after);
+
+        const entities = await CorporationEntity.findAll({
+            where: {
+                createdAt: {
+                    [Op.lt]: afterCursor,
+                }
+            },
+            order: [["createdAt", "DESC"]],
+            limit: first + 1,
+        });
+
+        return Connection.fromArray(
+            entities, page,
+            (item: any) => item.createdAt.getTime().toString());
+    }
+
+    public async search(keyword: string, page: PageParam) {
+        const { first, after } = page;
+        const afterCursor = parseTimeStampCursor(after);
+
+        const entities = await CorporationEntity.findAll({
+            where: {
+                name: {
+                    [Op.like]: `%${keyword}%`
+                }
+            },
+            order: [["createdAt", "DESC"]],
+            limit: first + 1,
+        });
+        return Connection.fromArray(
+            entities, page,
+            (item: any) => item.createdAt.getTime().toString());
     }
 }

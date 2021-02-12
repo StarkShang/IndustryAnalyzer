@@ -1,3 +1,6 @@
+import { assertDirective } from "graphql";
+import { PageParam } from "./common";
+
 export interface ConnectionEdge<T> {
     node: T;
     cursor: string;
@@ -47,12 +50,26 @@ export class Connection<T> {
         return origin;
     }
 
-    public static fromArray<T>(array: T[]): Connection<T> {
+    public static fromArray<T>(
+        array: T[],
+        page?: PageParam,
+        cursorGen?: (item: T) => string)
+        : Connection<T>
+    {
         const connection = new Connection<T>();
-        connection.edges = array.map((item) => ({ node: item, cursor: "" }));
-        connection.pageInfo = { hasNextPage: false, endCursor: "" };
+        const hasNextPage = page ? array.length > page.first : false;
+        const pageLength = page ? Math.min(page.first, array.length) : array.length;
+        connection.edges = array.slice(0, pageLength).map((item) => ({
+            node: item,
+            cursor: cursorGen ? getCursor(cursorGen(item)) : ""
+        }));
+        connection.pageInfo = {
+            hasNextPage,
+            endCursor: pageLength ? connection.edges[pageLength - 1].cursor : ""
+        };
         return connection;
     }
+
     public static get Empty(): Connection<any> {
         return new Connection<any>();
     }
@@ -61,4 +78,8 @@ export class Connection<T> {
         connection.pageInfo.hasNextPage = true;
         return connection;
     }
+}
+
+export function getCursor(cursorString: string): string {
+    return Buffer.from(cursorString).toString("base64");
 }
