@@ -1,0 +1,4 @@
+application:
+    port: 4000
+database:
+    filename: "./database.dev.sqlite"

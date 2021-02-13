@@ -16,7 +16,8 @@
         "graphql-tools": "^7.0.2",
         "lodash": "^4.17.20",
         "sequelize": "^6.5.0",
-        "sqlite3": "^5.0.1"
+        "sqlite3": "^5.0.1",
+        "yaml": "^1.10.0"
     },
     "devDependencies": {
         "@types/koa-router": "^7.4.1",

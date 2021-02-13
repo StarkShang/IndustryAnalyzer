@@ -24,7 +24,6 @@ export class ConceptManager extends DbManager {
     }
 
     public async createRelatedTechnologies(input: CreateRelatedTechnologyInput[]): Promise<CommonMutationResult> {
-        console.log(input);
         try {
             await ConceptRelatedTechnologyEntity.bulkCreate(input);
             return { success: true, message: "" };
