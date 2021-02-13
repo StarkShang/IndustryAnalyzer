@@ -48,5 +48,5 @@ export function associate() {
     Technology.hasMany(News);
     Technology.hasMany(TechnologyRelatedCorporation);
     Technology.hasMany(Patent);
-    TechnologyRelatedCorporation.hasOne(CorporationEntity);
+    CorporationEntity.hasMany(TechnologyRelatedCorporation);
 }

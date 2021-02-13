@@ -46,11 +46,27 @@ type Query {
     concept(id: BigInt!): Concept
 }
 
-input CreateConceptInput {
+input CreateOrUpdateConceptInput {
+    id: BigInt
     name: String!
     description: String
 }
 
+input CreateConceptRelatedCorporationInput {
+    description: String!
+    conceptId: BigInt!
+    corporationId: BigInt!
+}
+
+input CreateOrUpdateConceptRelatedCorporationInput {
+    id: BigInt
+    description: String!
+    conceptId: BigInt!
+    corporationId: BigInt!
+}
+
 type Mutation {
-    createConcept(input: CreateConceptInput): Concept
+    createOrUpdateConcept(input: CreateOrUpdateConceptInput!): Concept
+    createConceptRelatedCorporations(input: [CreateConceptRelatedCorporationInput!]!): [ConceptRelatedCorporation!]!
+    createOrUpdateConceptRelatedCorporation(input: CreateOrUpdateConceptRelatedCorporationInput!): ConceptRelatedCorporation
 }

@@ -54,6 +54,9 @@ export class CorporationManager extends DbManager {
             where: {
                 name: {
                     [Op.like]: `%${keyword}%`
+                },
+                createdAt: {
+                    [Op.lt]: afterCursor,
                 }
             },
             order: [["createdAt", "DESC"]],

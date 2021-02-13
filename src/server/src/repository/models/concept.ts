@@ -3,11 +3,11 @@ import { Technology } from "./technology";
 import { CorporationEntity } from "./corporation";
 import Timestamp from "./timestamp";
 
-export class Concept extends Model { }
-export class ConceptRelatedCorporation extends Model { }
+export class ConceptEntity extends Model { }
+export class ConceptRelatedCorporationEntity extends Model { }
 
 export function init(sequelize: Sequelize) {
-    Concept.init({
+    ConceptEntity.init({
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
@@ -29,11 +29,12 @@ export function init(sequelize: Sequelize) {
         sequelize,
         modelName: "concept",
     });
-    ConceptRelatedCorporation.init({
+    ConceptRelatedCorporationEntity.init({
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
         },
         description: {
             type: DataTypes.STRING,
@@ -46,8 +47,8 @@ export function init(sequelize: Sequelize) {
 }
 
 export function associate() {
-    Concept.hasMany(Technology);
-    Concept.hasMany(Concept);
-    Concept.hasMany(ConceptRelatedCorporation);
-    ConceptRelatedCorporation.hasOne(CorporationEntity);
+    ConceptEntity.hasMany(Technology);
+    ConceptEntity.hasMany(ConceptEntity);
+    ConceptEntity.hasMany(ConceptRelatedCorporationEntity);
+    CorporationEntity.hasMany(ConceptRelatedCorporationEntity);
 }

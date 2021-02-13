@@ -27,3 +27,9 @@ export class Concept {
         return new Concept();
     }
 }
+
+export interface CreateConceptRelatedCorporationInput {
+    conceptId: number;
+    corporationId: number;
+    description: string;
+}

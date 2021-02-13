@@ -33,7 +33,7 @@ module.exports = {
             ]
         },
         apollo: {
-            lintGQL: true
+            lintGQL: false
         }
     }
 };

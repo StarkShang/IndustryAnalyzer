@@ -23,6 +23,16 @@ export class Connection<T> {
         });
     }
 
+    public static unshiftNode<T>(connection: Connection<T>, item: T): Connection<T> {
+        connection.edges.unshift({ node: item, cursor: "" });
+        return connection;
+    }
+
+    public static unshiftNodes<T>(connection: Connection<T>, items: T[]): Connection<T> {
+        connection.edges = items.map(item => ({ node: item, cursor: "" })).concat(connection.edges);
+        return connection;
+    }
+
     public get hasNextPage(): boolean {
         return this.pageInfo.hasNextPage;
     }

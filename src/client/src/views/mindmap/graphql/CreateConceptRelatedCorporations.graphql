@@ -1,0 +1,17 @@
+mutation($input: [CreateConceptRelatedCorporationInput!]!) {
+    createConceptRelatedCorporations(
+        input: $input
+    ) {
+        id
+        description
+        corporation {
+            id
+            name
+            country {
+                code
+                name
+                en
+            }
+        }
+    }
+}

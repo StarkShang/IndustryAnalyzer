@@ -2,9 +2,35 @@ import { Connection } from "./connection";
 import { Corporation } from "./corporation";
 import { Technology } from "./technology";
 
-export interface CreateConceptInput {
+export interface CreateOrUpdateConceptInput {
+    id?: number;
     name: string;
     description: string;
+}
+
+export interface ConceptInput {
+    name: string;
+    description: string;
+}
+
+export interface CreateOrUpdateRelatedCorporationInput {
+    id?: number;
+    description: string;
+    conceptId: number;
+    corporationId: number;
+}
+
+export interface CreateRelatedCorporationInput {
+    description: string;
+    conceptId: number;
+    corporationId: number;
+}
+
+export interface UpdateRelatedCorporationInput {
+    id: number;
+    description: string;
+    conceptId: number;
+    corporationId: number;
 }
 
 export class ConceptRelatedCorporationInfo {
@@ -29,4 +55,10 @@ export class Concept {
     public static get Empty(): Concept {
         return new Concept();
     }
+}
+
+export interface ConceptRelatedCorporationEntity {
+    id: number;
+    description: string;
+    corporationId: number;
 }

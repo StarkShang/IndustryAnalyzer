@@ -16,7 +16,8 @@
         </div>
         <concept-corporation-editor :visible.sync="viewmodel.editor.visible"
             @search="searchCorporations"
-            @add="viewmodel.corporationEditor.visible=true">
+            @add="viewmodel.corporationEditor.visible=true"
+            @confirm="addConceptCorporation">
         </concept-corporation-editor>
         <corporation-editor
             :visible.sync="viewmodel.corporationEditor.visible"
@@ -27,15 +28,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { ConceptRelatedCorporationInfo, Connection, Corporation, Country, CountryStatistic, EditCorporationInput } from "@/common/models";
+import { ConceptRelatedCorporationInfo, Connection, Corporation, Country, CountryStatistic, CreateConceptRelatedCorporationInput, EditCorporationInput } from "@/common/models";
 import CountryStatisticsPanel from "@/common/components/CountryStatisticsPanel.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
 import ConceptCorporationItem from "@/common/components/ConceptCorporationItem.vue";
 import ConceptCorporationEditor from "@/common/components/dialogs/ConceptCorporationEditor.vue";
 import CorporationEditor from "@/common/components/dialogs/CorporationEditor.vue";
-import { createOrUpdateCorporation } from "../../graphql";
+import { createConceptRelatedCorporations, createOrUpdateCorporation, searchCorporations } from "../../graphql";
 
 class ViewModel {
+    public conceptId = -1;
     public editor = {
         visible: false
     };
@@ -63,16 +65,27 @@ export default class ConceptCorporationPanel extends Vue {
     }) public data!: { statistics: CountryStatistic[], connection: Connection<ConceptRelatedCorporationInfo> }
     public viewmodel = new ViewModel();
 
-    public searchCorporations(queryString: string, callback: (data: Corporation[]) => void): void {
-        callback([{
-            id: 1,
-            name: "123",
-            country: Country.Empty
-        }]);
+    public created() {
+        this.viewmodel.conceptId = parseInt(this.$route.params.id);
+    }
+
+    public async searchCorporations(queryString: string, callback: (data: Corporation[]) => void): Promise<void> {
+        const corporations = await searchCorporations(queryString);
+        callback(corporations);
     }
 
     public handleCorporationSelected(corporation: ConceptRelatedCorporationInfo): void {
-        this.$emit("select", corporation)
+        this.$emit("select", corporation);
+    }
+
+    public async addConceptCorporation(infos: ConceptRelatedCorporationInfo[]) {
+        const input: CreateConceptRelatedCorporationInput[] = infos.map(info => ({
+            description: info.description,
+            conceptId: this.viewmodel.conceptId,
+            corporationId: info.corporation.id
+        }));
+        const corporations = await createConceptRelatedCorporations(input);
+        Connection.unshiftNodes(this.data.connection, corporations);
     }
 
     public async handleCorporationCreated(input: EditCorporationInput): Promise<void> {
