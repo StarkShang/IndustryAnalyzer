@@ -19,7 +19,7 @@ export class CorporationManager extends DbManager {
     }
 
     public async findById(id: number): Promise<Corporation> {
-        const entity = await CorporationEntity.findOne({ where: { id }});
+        const entity = await CorporationEntity.findOne({ where: { id } });
         if (entity) {
             return entity.toJSON() as Corporation;
         } else {

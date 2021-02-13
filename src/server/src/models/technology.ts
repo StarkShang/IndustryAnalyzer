@@ -25,3 +25,14 @@ export class Technology {
         return new Technology();
     }
 }
+
+export interface CreateOrUpdateTechnologyInput {
+    id?: number;
+    name: string;
+    description: string;
+}
+
+export interface TechnologyInput {
+    name: string;
+    description: string;
+}

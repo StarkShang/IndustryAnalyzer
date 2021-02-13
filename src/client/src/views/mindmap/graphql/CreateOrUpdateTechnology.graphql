@@ -1,0 +1,7 @@
+mutation($input: CreateOrUpdateTechnologyInput!) {
+    createOrUpdateTechnology(input: $input) {
+        id
+        name
+        description
+    }
+}

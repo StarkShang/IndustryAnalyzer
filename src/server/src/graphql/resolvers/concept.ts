@@ -1,4 +1,4 @@
-import { Concept, ConceptRelatedCorporationEntity, Connection, CreateOrUpdateConceptInput, CreateOrUpdateRelatedCorporationInput, CreateRelatedCorporationInput, PageParam } from "@/models";
+import { Concept, ConceptRelatedCorporationEntity, Connection, CreateOrUpdateConceptInput, CreateOrUpdateRelatedCorporationInput, CreateRelatedCorporationInput, CreateRelatedTechnologyInput, PageParam } from "@/models";
 import { DbManager } from "@/repository/managers";
 
 export default {
@@ -25,6 +25,13 @@ export default {
             { manager }: { manager: DbManager }
         ) {
             return await manager.concept.createRelatedCorporations(input);
+        },
+        async createConceptRelatedTechnologies(
+            _: never,
+            { input }: { input: CreateRelatedTechnologyInput[] },
+            { manager }: { manager: DbManager }
+        ) {
+            return await manager.concept.createRelatedTechnologies(input);
         },
         async createOrUpdateConceptRelatedCorporation(
             _: never,

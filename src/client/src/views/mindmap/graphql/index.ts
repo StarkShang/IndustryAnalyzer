@@ -1,16 +1,23 @@
 import { Message } from "element-ui";
 import { apolloClient } from "@/plugins/apollo";
 import {
+    CommonMutationResult,
     ConceptRelatedCorporationInfo,
     Connection,
     Corporation,
     CreateConceptRelatedCorporationInput,
-    CreateOrUpdateCorporationInput
+    CreateConceptRelatedTechnologyInput,
+    CreateOrUpdateCorporationInput,
+    CreateTechnologyInput,
+    Technology
 } from "@/common/models";
 
 import CreateOrUpdateCorporation from "./CreateOrUpdateCorporation.graphql";
 import SearchCorporation from "./SearchCorporation.graphql";
 import CreateConceptRelatedCorporations from "./CreateConceptRelatedCorporations.graphql";
+import CreateConceptRelatedTechnologies from "./CreateConceptRelatedTechnologies.graphql";
+import CreateOrUpdateTechnology from "./CreateOrUpdateTechnology.graphql";
+import SearchTechnologies from "./SearchTechnologies.graphql";
 
 export async function createOrUpdateCorporation(input: CreateOrUpdateCorporationInput): Promise<Corporation | null> {
     if (!input.name || !input.country) { return null; }
@@ -54,6 +61,51 @@ export async function createConceptRelatedCorporations(input: CreateConceptRelat
     } catch (error) {
         console.error(error);
         Message.error("添加企业失败");
+        return [];
+    }
+}
+
+export async function createTechnology(input: CreateTechnologyInput): Promise<Technology | null> {
+    if (!input) { return null; }
+
+    try {
+        const response = await apolloClient.mutate({
+            mutation: CreateOrUpdateTechnology,
+            variables: { input }
+        });
+        return response.data.createOrUpdateTechnology as Technology;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function createConceptRelatedTechnologies(input: CreateConceptRelatedTechnologyInput[]): Promise<CommonMutationResult> {
+    if (!input || input.length <= 0) { return { success: false }; }
+    try {
+        const response = await apolloClient.mutate({
+            mutation: CreateConceptRelatedTechnologies,
+            variables: { input }
+        });
+        return response.data.createConceptRelatedTechnologies as CommonMutationResult;
+    } catch (error) {
+        console.error(error);
+        return { success: false };
+    }
+}
+
+export async function searchTechnologies(keyword: string): Promise<Technology[]> {
+    if (!keyword) { return []; }
+    try {
+        const response = await apolloClient.query({
+            query: SearchTechnologies,
+            variables: { keyword }
+        });
+        const technologies = response.data.searchTechnology as Connection<Technology>;
+        return technologies.edges.map(edge => edge.node);
+    } catch (error) {
+        console.error(error);
+        Message.error("搜索技术失败");
         return [];
     }
 }

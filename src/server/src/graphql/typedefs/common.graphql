@@ -34,3 +34,11 @@ type PageInfo {
     """
     hasNextPage: Boolean!
 }
+
+"""
+默认Mutation结果
+"""
+type CommonMutationResult {
+    success: Boolean!
+    message: String
+}

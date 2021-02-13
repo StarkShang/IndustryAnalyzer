@@ -44,4 +44,15 @@ type TechnologyConnection {
 
 type Query {
     technology(id: BigInt!): Technology
+    searchTechnology(keyword: String, pageParam: PageParam): TechnologyConnection!
+}
+
+input CreateOrUpdateTechnologyInput {
+    id: BigInt
+    name: String!
+    description: String!
+}
+
+type Mutation {
+    createOrUpdateTechnology(input: CreateOrUpdateTechnologyInput): Technology
 }

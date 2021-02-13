@@ -1,0 +1,6 @@
+mutation($input: [CreateConceptRelatedTechnologyInput!]!) {
+    createConceptRelatedTechnologies(input: $input) {
+        success
+        message
+    }
+}

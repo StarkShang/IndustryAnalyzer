@@ -18,7 +18,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="handleClose">取 消</el-button>
-            <el-button type="primary">确 定</el-button>
+            <el-button type="primary" @click="handleConfirm">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -34,6 +34,11 @@ import DialogMixin from "./dialog";
 export default class TechnologyEditor extends Mixins(Vue, DialogMixin) {
     @Prop({ default: "编辑技术" }) public title!: string;
     @Prop({ default: () => Technology.Empty }) public technology!: Technology;
+
+    public handleConfirm() {
+        this.$emit("add", this.technology);
+        this.closeDialog();
+    }
 
     public handleClose(): void {
         this.closeDialog();

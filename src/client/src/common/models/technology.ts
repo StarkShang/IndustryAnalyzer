@@ -25,3 +25,8 @@ export class Technology {
         return new Technology();
     }
 }
+
+export interface CreateTechnologyInput {
+    name: string;
+    description: string;
+}

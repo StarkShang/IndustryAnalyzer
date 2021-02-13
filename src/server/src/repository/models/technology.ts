@@ -4,15 +4,16 @@ import { News } from "./news";
 import { Patent } from "./patent";
 import Timestamp from "./timestamp";
 
-export class Technology extends Model { }
+export class TechnologyEntity extends Model { }
 export class TechnologyRelatedCorporation extends Model { }
 
 export function init(sequelize: Sequelize) {
-    Technology.init({
+    TechnologyEntity.init({
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         name: {
             type: DataTypes.STRING,
@@ -45,8 +46,8 @@ export function init(sequelize: Sequelize) {
 }
 
 export function associate() {
-    Technology.hasMany(News);
-    Technology.hasMany(TechnologyRelatedCorporation);
-    Technology.hasMany(Patent);
+    TechnologyEntity.hasMany(News);
+    TechnologyEntity.hasMany(TechnologyRelatedCorporation);
+    TechnologyEntity.hasMany(Patent);
     CorporationEntity.hasMany(TechnologyRelatedCorporation);
 }

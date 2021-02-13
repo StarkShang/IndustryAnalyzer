@@ -14,12 +14,12 @@ export default async (): Promise<DbManager> => {
 
     const resolve = (dir: string) => path.join(__dirname, "models", dir);
     const modelFileNames = fs.readdirSync(resolve("."));
-    modelFileNames.forEach(async filname => {
-        const { init } = await import(resolve(filname));
+    modelFileNames.forEach(async filename => {
+        const { init } = await import(resolve(filename));
         if (init) { init(sequelize); }
     });
-    modelFileNames.forEach(async filname => {
-        const { associate } = await import(resolve(filname));
+    modelFileNames.forEach(async filename => {
+        const { associate } = await import(resolve(filename));
         if (associate) { associate(); }
     });
     if (process.env.NODE_ENV === "development") {

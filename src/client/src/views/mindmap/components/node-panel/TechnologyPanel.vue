@@ -14,29 +14,33 @@
             value-key="name"
             title="选择技术"
             :visible.sync="viewmodel.selector.visible"
-            @search="searchTechnologies">
+            @search="searchTechnologies"
+            @confirm="relateTechnology">
             <div slot="addition" class="addition-button" @click="viewmodel.editor.visible = true">
                 + 新增一项技术
             </div>
             <div slot-scope="{item}">
-                {{ item }}
+                {{ item.name }}
             </div>
         </selection-dialog>
-        <technology-editor :visible.sync="viewmodel.editor.visible">
+        <technology-editor :visible.sync="viewmodel.editor.visible"
+            @add="addTechnology">
         </technology-editor>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Connection, Technology } from "@/common/models";
+import { Connection, CreateConceptRelatedTechnologyInput, CreateTechnologyInput, Technology } from "@/common/models";
 import CountryStatisticsPanel from "@/common/components/CountryStatisticsPanel.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
 import TechnologyItem from "@/common/components/TechnologyItem.vue";
 import TechnologyEditor from "@/common/components/dialogs/TechnologtEditor.vue";
 import SelectionDialog from "@/common/components/dialogs/SelectionDialog.vue";
+import { createConceptRelatedTechnologies, createTechnology, searchTechnologies } from "../../graphql";
 
 class ViewModel {
+    public conceptId = -1;
     public editor = {
         visible: false
     };
@@ -59,15 +63,39 @@ export default class TechnologyPanel extends Vue {
     @Prop({ default: () => Connection.Default }) public data!: Connection<Technology>;
     public viewmodel = new ViewModel();
 
-    public searchTechnologies(queryString: string, callback: (data: Technology[]) => void): void {
-        callback([{
-            id: 1,
-            name: "123",
-            description: "123edsadds",
-            news: Connection.Empty,
-            corporations: Connection.Empty,
-            patents: Connection.Empty
-        }]);
+    public created() {
+        this.viewmodel.conceptId = parseInt(this.$route.params.id);
+    }
+
+    public async searchTechnologies(queryString: string, callback: (data: Technology[]) => void): Promise<void> {
+        if (!queryString) { return; }
+        const technologies = await searchTechnologies(queryString);
+        callback(technologies);
+    }
+
+    public async addTechnology(technology: Technology) {
+        const response = await createTechnology({
+            name: technology.name,
+            description: technology.description
+        });
+        if (response) {
+            this.$message.success("创建技术成功");
+        } else {
+            this.$message.error("创建技术失败");
+        }
+    }
+
+    public async relateTechnology(technologies: Technology[]) {
+        const input: CreateConceptRelatedTechnologyInput[]
+            = technologies.map(tech => ({
+                conceptId: this.viewmodel.conceptId,
+                technologyId: tech.id }));
+        const response = await createConceptRelatedTechnologies(input);
+        if (response.success) {
+            this.$message.success("关联技术成功");
+        } else {
+            this.$message.error("关联技术失败");
+        }
     }
 
     public handleTechnologySelected(technology: Technology): void {

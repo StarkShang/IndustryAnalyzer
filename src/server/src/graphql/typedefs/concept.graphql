@@ -1,6 +1,7 @@
 # import BigInt from "common.graphql"
 # import PageInfo from "common.graphql"
 # import PageParam from "common.graphql"
+# import CommonMutationResult from "common.graphql"
 # import Corporation from "corporation.graphql"
 # import TechnologyConnection from "technology.graphql"
 
@@ -58,6 +59,11 @@ input CreateConceptRelatedCorporationInput {
     corporationId: BigInt!
 }
 
+input CreateConceptRelatedTechnologyInput {
+    conceptId: BigInt!
+    technologyId: BigInt!
+}
+
 input CreateOrUpdateConceptRelatedCorporationInput {
     id: BigInt
     description: String!
@@ -68,5 +74,6 @@ input CreateOrUpdateConceptRelatedCorporationInput {
 type Mutation {
     createOrUpdateConcept(input: CreateOrUpdateConceptInput!): Concept
     createConceptRelatedCorporations(input: [CreateConceptRelatedCorporationInput!]!): [ConceptRelatedCorporation!]!
+    createConceptRelatedTechnologies(input: [CreateConceptRelatedTechnologyInput!]!): CommonMutationResult!
     createOrUpdateConceptRelatedCorporation(input: CreateOrUpdateConceptRelatedCorporationInput!): ConceptRelatedCorporation
 }

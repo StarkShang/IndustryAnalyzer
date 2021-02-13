@@ -1,0 +1,23 @@
+query($keyword: String!) {
+    searchTechnology(
+        keyword: $keyword,
+        pageParam: {
+            after: "",
+            first: 10
+        }
+    ) {
+        edges {
+            node {
+                id
+                name
+                description
+            }
+            cursor
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+        totalCount
+    }
+}
