@@ -6,6 +6,20 @@ import { ConceptManager, CorporationManager, CountryManager, DbManager, Technolo
 
 export { DbManager } from "./managers";
 
+export async function buildEntities(sequelize: Sequelize) {
+    const resolve = (dir: string) => path.join(__dirname, "models", dir);
+    const modelFileNames = fs.readdirSync(resolve("."));
+
+    for (const filename of modelFileNames) {
+        const { init } = await import(resolve(filename));
+        if (init) { init(sequelize); }
+    }
+    for (const filename of modelFileNames) {
+        const { associate } = await import(resolve(filename));
+        if (associate) { associate(); }
+    }
+}
+
 export default async (configuration: AppConfiguration): Promise<DbManager> => {
     const sequelize = new Sequelize({
         dialect: "sqlite",
@@ -13,16 +27,7 @@ export default async (configuration: AppConfiguration): Promise<DbManager> => {
         logging: console.log
     });
 
-    const resolve = (dir: string) => path.join(__dirname, "models", dir);
-    const modelFileNames = fs.readdirSync(resolve("."));
-    modelFileNames.forEach(async filename => {
-        const { init } = await import(resolve(filename));
-        if (init) { init(sequelize); }
-    });
-    modelFileNames.forEach(async filename => {
-        const { associate } = await import(resolve(filename));
-        if (associate) { associate(); }
-    });
+    await buildEntities(sequelize);
     if (process.env.NODE_ENV !== "production") {
         await sequelize.sync({ force: true });
     }

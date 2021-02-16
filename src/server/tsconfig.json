@@ -5,7 +5,7 @@
         "strict": true,
         "allowJs": true,
         "outDir": "./dist",
-        "rootDir": "./src",
+        // "rootDir": "./src",
         "jsx": "preserve",
         "importHelpers": true,
         "moduleResolution": "node",
@@ -29,7 +29,7 @@
     },
     "include": [
         "src/**/*.ts",
-        "tests/**/*.ts"
+        "test/**/*.ts"
     ],
     "exclude": [
         "node_modules"

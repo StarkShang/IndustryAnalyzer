@@ -1,0 +1,6 @@
+color: true
+reporter:
+    - "mochawesome"
+require:
+    - "ts-node/register"
+    - "tsconfig-paths/register"

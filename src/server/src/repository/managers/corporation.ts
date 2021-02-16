@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Connection, Corporation, CreateCorporationInput, PageParam, UpdateCorporationInput } from "@/models";
+import { Connection, Corporation, CreateCorporationInput, PageParam } from "@/models";
 import { CorporationEntity } from "../models/corporation";
 import { parseTimeStampCursor } from "../utils/cursor";
 import { DbManager } from "./manager";
