@@ -1,4 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
+import { ConceptRelatedCorporationEntity } from "./concept";
 import { Timestamp, TimestampEntity } from "./timestamp";
 
 interface CorporationAttributes extends Timestamp {

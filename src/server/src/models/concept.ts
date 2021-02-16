@@ -13,17 +13,9 @@ export interface ConceptInput {
     description: string;
 }
 
-export interface CreateOrUpdateRelatedCorporationInput {
-    id?: number;
-    description: string;
-    conceptId: number;
+export interface RelatedCorporationInput {
     corporationId: number;
-}
-
-export interface CreateRelatedCorporationInput {
     description: string;
-    conceptId: number;
-    corporationId: number;
 }
 
 export interface CreateRelatedTechnologyInput {

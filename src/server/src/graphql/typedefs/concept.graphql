@@ -6,7 +6,6 @@
 # import TechnologyConnection from "technology.graphql"
 
 type ConceptRelatedCorporation {
-    id: BigInt!
     description: String!
     corporation: Corporation!
 }
@@ -53,22 +52,14 @@ input CreateOrUpdateConceptInput {
     description: String
 }
 
-input CreateConceptRelatedCorporationInput {
+input ConceptRelatedCorporationInput {
     description: String!
-    conceptId: BigInt!
-    corporationId: BigInt!
-}
-
-input CreateOrUpdateConceptRelatedCorporationInput {
-    id: BigInt
-    description: String!
-    conceptId: BigInt!
     corporationId: BigInt!
 }
 
 type Mutation {
     createOrUpdateConcept(input: CreateOrUpdateConceptInput!): Concept
-    createConceptRelatedCorporations(input: [CreateConceptRelatedCorporationInput!]!): [ConceptRelatedCorporation!]!
+    createConceptRelatedCorporation(conceptId: BigInt, relation: ConceptRelatedCorporationInput!): CommonMutationResult!
+    createConceptRelatedCorporations(conceptId: BigInt, relations: [ConceptRelatedCorporationInput!]!): CommonMutationResult!
     createConceptRelatedTechnologies(conceptId: BigInt, technologyIds: [BigInt!]!): CommonMutationResult!
-    createOrUpdateConceptRelatedCorporation(input: CreateOrUpdateConceptRelatedCorporationInput!): ConceptRelatedCorporation
 }

@@ -1,4 +1,4 @@
-import { CommonMutationResult, Concept, ConceptRelatedCorporationEntity, Connection, CreateOrUpdateConceptInput, CreateOrUpdateRelatedCorporationInput, CreateRelatedCorporationInput, CreateRelatedTechnologyInput, PageParam } from "@/models";
+import { CommonMutationResult, Concept, ConceptRelatedCorporationEntity, ConceptRelatedCorporationInfo, Connection, CreateOrUpdateConceptInput, RelatedCorporationInput, PageParam } from "@/models";
 import { DbManager } from "@/repository/managers";
 import { ConceptEntity } from "@/repository/models/concept";
 
@@ -24,12 +24,29 @@ export default {
                 return await manager.concept.create(input);
             }
         },
+        async createConceptRelatedCorporation(
+            _: never,
+            { conceptId, relation }: { conceptId: number, relation: RelatedCorporationInput },
+            { manager }: { manager: DbManager }
+        ): Promise<CommonMutationResult> {
+            const concept = await manager.concept.findById(conceptId);
+            if (concept) {
+                return await manager.concept.createRelatedCorporation(concept, relation);
+            } else {
+                return { success: false, message: "找不到对应概念" };
+            }
+        },
         async createConceptRelatedCorporations(
             _: never,
-            { input }: { input: CreateRelatedCorporationInput[] },
+            { conceptId, relations }: { conceptId: number, relations: RelatedCorporationInput[] },
             { manager }: { manager: DbManager }
-        ) {
-            return await manager.concept.createRelatedCorporations(input);
+        ): Promise<CommonMutationResult> {
+            const concept = await manager.concept.findById(conceptId);
+            if (concept) {
+                return await manager.concept.createRelatedCorporations(concept, relations);
+            } else {
+                return { success: false, message: "找不到对应概念" };
+            }
         },
         async createConceptRelatedTechnologies(
             _: never,
@@ -45,17 +62,6 @@ export default {
                     message: "找不到对应概念"
                 };
             }
-        },
-        async createOrUpdateConceptRelatedCorporation(
-            _: never,
-            { input }: { input: CreateOrUpdateRelatedCorporationInput },
-            { manager }: { manager: DbManager }
-        ) {
-            if (input.id) {
-                // return await manager.concept.updateRelatedCorporation(input.id, input);
-            } else {
-                return await manager.concept.createRelatedCorporation(input);
-            }
         }
     },
     Concept: {
@@ -67,12 +73,20 @@ export default {
             { pageParam }: { pageParam: PageParam },
             { manager }: { manager: DbManager }
         ) {
-            console.log(concept);
             const technologies = await manager.concept.getRelatedTechnologies(concept, pageParam);
-            return technologies;
+            return Connection.fromArray(
+                technologies, pageParam,
+                (item: any) => item.createdAt.getTime().toString());
         },
-        async corporations(concept: Concept, { pageParam }: { pageParam: PageParam }, { }) {
-            return Connection.Default;
+        async corporations(
+            concept: ConceptEntity,
+            { pageParam }: { pageParam: PageParam },
+            { manager }: { manager: DbManager }
+        ) {
+            const corporations = await manager.concept.getRelatedCorporations(concept, pageParam);
+            return Connection.fromArray(
+                corporations, pageParam,
+                (item: any) => item.createdAt.getTime().toString());
         }
     },
     ConceptRelatedCorporation: {
