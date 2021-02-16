@@ -1,9 +1,35 @@
-import { Sequelize, DataTypes, Model } from "sequelize";
+import { Sequelize, DataTypes, Model, Optional, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyHasAssociationMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin } from "sequelize";
 import { TechnologyEntity } from "./technology";
 import { CorporationEntity } from "./corporation";
-import Timestamp from "./timestamp";
+import TimestampEntity, { Timestamp } from "./timestamp";
 
-export class ConceptEntity extends Model { }
+// export class ConceptEntity extends Model { }
+export interface ConceptAttributes extends Timestamp {
+    id: number;
+    name: string;
+    description: string;
+}
+interface ConceptCreationAttributes extends Optional<ConceptAttributes, "id" | "createdAt" | "updatedAt"> {}
+export class ConceptEntity extends Model<ConceptAttributes, ConceptCreationAttributes> implements ConceptAttributes {
+    public id!: number;
+    public name!: string;
+    public description!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
+
+    // Since TS cannot determine model association at compile time
+    // we have to declare them here purely virtually
+    // these will not exist until `Model.init` was called.
+    public getTechnologies!: HasManyGetAssociationsMixin<TechnologyEntity>; // Note the null assertions!
+    public addTechnology!: HasManyAddAssociationMixin<TechnologyEntity, number>;
+    public hasTechnology!: HasManyHasAssociationMixin<TechnologyEntity, number>;
+    public countTechnologies!: HasManyCountAssociationsMixin;
+    public createTechnology!: HasManyCreateAssociationMixin<TechnologyEntity>;
+
+    // pre-declare possible inclusions, these will only be populated if actively include a relation
+    public readonly technologies?: TechnologyEntity[];
+
+}
 export class ConceptRelatedCorporationEntity extends Model { }
 export class ConceptRelatedTechnologyEntity extends Model {}
 
@@ -25,11 +51,12 @@ export function init(sequelize: Sequelize) {
             allowNull: true,
             defaultValue: ""
         },
-        ...Timestamp
+        ...TimestampEntity
     }, {
         sequelize,
-        modelName: "concept",
+        modelName: "concept"
     });
+
     ConceptRelatedCorporationEntity.init({
         id: {
             type: DataTypes.BIGINT,
@@ -41,29 +68,13 @@ export function init(sequelize: Sequelize) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        ...Timestamp
+        ...TimestampEntity
     }, {
         sequelize,
         modelName: "conceptCorporation",
     });
     ConceptRelatedTechnologyEntity.init({
-        id: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        conceptId: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
-            unique: "uk_concept_technology"
-        },
-        technologyId: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
-            unique: "uk_concept_technology"
-        },
-        ...Timestamp
+        ...TimestampEntity
     }, {
         sequelize,
         modelName: "conceptTechnology",
@@ -74,20 +85,18 @@ export function associate() {
     TechnologyEntity.belongsToMany(ConceptEntity, {
         through: {
             model: ConceptRelatedTechnologyEntity,
-            unique: false
+            unique: true
         },
-        foreignKey: "technologyId",
         constraints: false
     });
     ConceptEntity.belongsToMany(TechnologyEntity, {
         through: {
             model: ConceptRelatedTechnologyEntity,
-            unique: false
+            unique: true
         },
-        foreignKey: "conceptId",
         constraints: false
     });
-    ConceptEntity.hasMany(ConceptEntity);
+
     ConceptEntity.hasMany(ConceptRelatedCorporationEntity);
-    CorporationEntity.hasMany(ConceptRelatedCorporationEntity);
+    ConceptRelatedCorporationEntity.hasOne(CorporationEntity);
 }

@@ -24,7 +24,7 @@ export default async (configuration: AppConfiguration): Promise<DbManager> => {
         if (associate) { associate(); }
     });
     if (process.env.NODE_ENV !== "production") {
-        await sequelize.sync({ alter: true });
+        await sequelize.sync({ force: true });
     }
 
     //

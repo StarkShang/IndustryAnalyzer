@@ -1,10 +1,15 @@
 import { Concept, ConceptRelatedCorporationEntity, Connection, CreateOrUpdateConceptInput, CreateOrUpdateRelatedCorporationInput, CreateRelatedCorporationInput, CreateRelatedTechnologyInput, PageParam } from "@/models";
 import { DbManager } from "@/repository/managers";
+import { ConceptEntity } from "@/repository/models/concept";
 
 export default {
     Query: {
-        async concept() {
-            return Concept.Empty;
+        async concept(
+            _: never,
+            { id }: { id: number },
+            { manager }: { manager: DbManager }
+        ) {
+            return await manager.concept.findById(id);
         }
     },
     Mutation: {
@@ -49,8 +54,13 @@ export default {
         async competitors(concept: Concept, { pageParam }: { pageParam: PageParam }, { }) {
             return Connection.Default;
         },
-        async technologies(concept: Concept, { pageParam }: { pageParam: PageParam }, { }) {
-            return Connection.Default;
+        async technologies(
+            concept: ConceptEntity,
+            { pageParam }: { pageParam: PageParam },
+            { manager }: { manager: DbManager }
+        ) {
+            const technologies = await manager.concept.getRelatedTechnologies(concept, pageParam);
+            return technologies;
         },
         async corporations(concept: Concept, { pageParam }: { pageParam: PageParam }, { }) {
             return Connection.Default;

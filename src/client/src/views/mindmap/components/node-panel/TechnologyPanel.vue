@@ -93,6 +93,7 @@ export default class TechnologyPanel extends Vue {
         const response = await createConceptRelatedTechnologies(input);
         if (response.success) {
             this.$message.success("关联技术成功");
+            Connection.unshiftNodes(this.data, technologies);
         } else {
             this.$message.error("关联技术失败");
         }
