@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Connection, CreateConceptRelatedTechnologyInput, CreateTechnologyInput, Technology } from "@/common/models";
+import { Connection, Technology } from "@/common/models";
 import CountryStatisticsPanel from "@/common/components/CountryStatisticsPanel.vue";
 import ConnectionPanel from "@/common/components/ConnectionPanel.vue";
 import TechnologyItem from "@/common/components/TechnologyItem.vue";
@@ -86,11 +86,8 @@ export default class TechnologyPanel extends Vue {
     }
 
     public async relateTechnology(technologies: Technology[]) {
-        const input: CreateConceptRelatedTechnologyInput[]
-            = technologies.map(tech => ({
-                conceptId: this.viewmodel.conceptId,
-                technologyId: tech.id }));
-        const response = await createConceptRelatedTechnologies(input);
+        const technologyIds = technologies.map(tech => tech.id );
+        const response = await createConceptRelatedTechnologies(this.viewmodel.conceptId, technologyIds);
         if (response.success) {
             this.$message.success("关联技术成功");
             Connection.unshiftNodes(this.data, technologies);

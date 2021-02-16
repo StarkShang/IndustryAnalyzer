@@ -1,4 +1,4 @@
-import { Concept, ConceptRelatedCorporationEntity, Connection, CreateOrUpdateConceptInput, CreateOrUpdateRelatedCorporationInput, CreateRelatedCorporationInput, CreateRelatedTechnologyInput, PageParam } from "@/models";
+import { CommonMutationResult, Concept, ConceptRelatedCorporationEntity, Connection, CreateOrUpdateConceptInput, CreateOrUpdateRelatedCorporationInput, CreateRelatedCorporationInput, CreateRelatedTechnologyInput, PageParam } from "@/models";
 import { DbManager } from "@/repository/managers";
 import { ConceptEntity } from "@/repository/models/concept";
 
@@ -33,10 +33,18 @@ export default {
         },
         async createConceptRelatedTechnologies(
             _: never,
-            { input }: { input: CreateRelatedTechnologyInput[] },
+            { conceptId, technologyIds }: { conceptId: number, technologyIds: number[] },
             { manager }: { manager: DbManager }
-        ) {
-            return await manager.concept.createRelatedTechnologies(input);
+        ): Promise<CommonMutationResult> {
+            const concept = await manager.concept.findById(conceptId);
+            if (concept) {
+                return await manager.concept.createRelatedTechnologies(concept, technologyIds);
+            } else {
+                return {
+                    success: false,
+                    message: "找不到对应概念"
+                };
+            }
         },
         async createOrUpdateConceptRelatedCorporation(
             _: never,
@@ -44,7 +52,7 @@ export default {
             { manager }: { manager: DbManager }
         ) {
             if (input.id) {
-                return await manager.concept.updateRelatedCorporation(input.id, input);
+                // return await manager.concept.updateRelatedCorporation(input.id, input);
             } else {
                 return await manager.concept.createRelatedCorporation(input);
             }
@@ -59,6 +67,7 @@ export default {
             { pageParam }: { pageParam: PageParam },
             { manager }: { manager: DbManager }
         ) {
+            console.log(concept);
             const technologies = await manager.concept.getRelatedTechnologies(concept, pageParam);
             return technologies;
         },

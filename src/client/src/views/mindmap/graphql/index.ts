@@ -6,7 +6,6 @@ import {
     Connection,
     Corporation,
     CreateConceptRelatedCorporationInput,
-    CreateConceptRelatedTechnologyInput,
     CreateOrUpdateCorporationInput,
     CreateTechnologyInput,
     Technology
@@ -80,12 +79,12 @@ export async function createTechnology(input: CreateTechnologyInput): Promise<Te
     }
 }
 
-export async function createConceptRelatedTechnologies(input: CreateConceptRelatedTechnologyInput[]): Promise<CommonMutationResult> {
-    if (!input || input.length <= 0) { return { success: false }; }
+export async function createConceptRelatedTechnologies(conceptId: number, technologyIds: number[]): Promise<CommonMutationResult> {
+    if (!conceptId || !technologyIds || technologyIds.length <= 0) { return { success: false }; }
     try {
         const response = await apolloClient.mutate({
             mutation: CreateConceptRelatedTechnologies,
-            variables: { input }
+            variables: { conceptId, technologyIds }
         });
         return response.data.createConceptRelatedTechnologies as CommonMutationResult;
     } catch (error) {

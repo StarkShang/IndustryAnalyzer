@@ -5,7 +5,7 @@ export interface Timestamp {
     updatedAt: Date;
 }
 
-export default {
+export const TimestampEntity = {
     createdAt: {
         type: DataTypes.DATE(6),
         allowNull: false,

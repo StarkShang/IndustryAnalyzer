@@ -1,3 +1,5 @@
+export type NewsHostType = "Corporation" | "Technology";
+
 export class NewsLink {
     public id = -1;
     public url = "";

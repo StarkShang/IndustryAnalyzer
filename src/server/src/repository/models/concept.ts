@@ -1,16 +1,23 @@
-import { Sequelize, DataTypes, Model, Optional, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyHasAssociationMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin } from "sequelize";
+import { Sequelize, DataTypes, Model, Optional,
+    HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyAddAssociationsMixin,
+    HasManyHasAssociationMixin, HasManyHasAssociationsMixin, HasManyCountAssociationsMixin,
+    HasManyCreateAssociationMixin,
+    HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin,
+    HasManySetAssociationsMixin
+} from "sequelize";
 import { TechnologyEntity } from "./technology";
 import { CorporationEntity } from "./corporation";
-import TimestampEntity, { Timestamp } from "./timestamp";
+import { Timestamp, TimestampEntity } from "./timestamp";
 
-// export class ConceptEntity extends Model { }
-export interface ConceptAttributes extends Timestamp {
+interface ConceptAttributes extends Timestamp {
     id: number;
     name: string;
     description: string;
 }
 interface ConceptCreationAttributes extends Optional<ConceptAttributes, "id" | "createdAt" | "updatedAt"> {}
-export class ConceptEntity extends Model<ConceptAttributes, ConceptCreationAttributes> implements ConceptAttributes {
+export class ConceptEntity extends Model<ConceptAttributes, ConceptCreationAttributes>
+    implements ConceptAttributes
+{
     public id!: number;
     public name!: string;
     public description!: string;
@@ -20,18 +27,53 @@ export class ConceptEntity extends Model<ConceptAttributes, ConceptCreationAttri
     // Since TS cannot determine model association at compile time
     // we have to declare them here purely virtually
     // these will not exist until `Model.init` was called.
-    public getTechnologies!: HasManyGetAssociationsMixin<TechnologyEntity>; // Note the null assertions!
-    public addTechnology!: HasManyAddAssociationMixin<TechnologyEntity, number>;
-    public hasTechnology!: HasManyHasAssociationMixin<TechnologyEntity, number>;
-    public countTechnologies!: HasManyCountAssociationsMixin;
+    public createCorporation!: HasManyCreateAssociationMixin<CorporationEntity>;
+    public addCorporation!: HasManyAddAssociationMixin<CorporationEntity, number>;
+    public addCorporations!: HasManyAddAssociationsMixin<CorporationEntity, number>;
+    public removeCorporation!: HasManyRemoveAssociationMixin<CorporationEntity, number>;
+    public removeCorporations!: HasManyRemoveAssociationsMixin<CorporationEntity, number>;
+    public setCorporations!: HasManySetAssociationsMixin<CorporationEntity, number>;
+    public countCorporations!: HasManyCountAssociationsMixin;
+    public hasCorporation!: HasManyHasAssociationMixin<CorporationEntity, number>;
+    public hasCorporations!: HasManyHasAssociationsMixin<CorporationEntity, number>;
+    public getCorporations!: HasManyGetAssociationsMixin<CorporationEntity>;
+
     public createTechnology!: HasManyCreateAssociationMixin<TechnologyEntity>;
+    public addTechnology!: HasManyAddAssociationMixin<TechnologyEntity, number>;
+    public addTechnologies!: HasManyAddAssociationsMixin<TechnologyEntity, number>;
+    public removeTechnology!: HasManyRemoveAssociationMixin<TechnologyEntity, number>;
+    public removeTechnologies!: HasManyRemoveAssociationsMixin<TechnologyEntity, number>;
+    public setTechnologies!: HasManySetAssociationsMixin<TechnologyEntity, number>;
+    public countTechnologies!: HasManyCountAssociationsMixin;
+    public hasTechnology!: HasManyHasAssociationMixin<TechnologyEntity, number>;
+    public hasTechnologies!: HasManyHasAssociationsMixin<TechnologyEntity, number>;
+    public getTechnologies!: HasManyGetAssociationsMixin<TechnologyEntity>;
 
     // pre-declare possible inclusions, these will only be populated if actively include a relation
+    public readonly corporations?: CorporationEntity[];
     public readonly technologies?: TechnologyEntity[];
-
 }
-export class ConceptRelatedCorporationEntity extends Model { }
-export class ConceptRelatedTechnologyEntity extends Model {}
+
+interface ConceptRelatedCorporationAttributes extends Timestamp {
+    description: string;
+}
+interface ConceptRelatedCorporationCreationAttributes extends Optional<ConceptRelatedCorporationAttributes, "createdAt" | "updatedAt"> {}
+export class ConceptRelatedCorporationEntity extends Model<any, any>
+    implements ConceptRelatedCorporationAttributes
+{
+    public description!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
+}
+
+interface ConceptRelatedTechnologyAttributes extends Timestamp {}
+interface ConceptRelatedTechnologyCreationAttributes extends Optional<ConceptRelatedTechnologyAttributes, "createdAt" | "updatedAt"> {}
+export class ConceptRelatedTechnologyEntity extends Model<any, any>
+    implements ConceptRelatedTechnologyAttributes
+{
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
+}
 
 export function init(sequelize: Sequelize) {
     ConceptEntity.init({
@@ -58,12 +100,6 @@ export function init(sequelize: Sequelize) {
     });
 
     ConceptRelatedCorporationEntity.init({
-        id: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
         description: {
             type: DataTypes.STRING,
             allowNull: false
@@ -97,6 +133,18 @@ export function associate() {
         constraints: false
     });
 
-    ConceptEntity.hasMany(ConceptRelatedCorporationEntity);
-    ConceptRelatedCorporationEntity.hasOne(CorporationEntity);
+    CorporationEntity.belongsToMany(ConceptEntity, {
+        through: {
+            model: ConceptRelatedCorporationEntity,
+            unique: true
+        },
+        constraints: false
+    });
+    ConceptEntity.belongsToMany(CorporationEntity, {
+        through: {
+            model: ConceptRelatedCorporationEntity,
+            unique: true,
+        },
+        constraints: false
+    })
 }

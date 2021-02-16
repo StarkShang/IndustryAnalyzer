@@ -30,17 +30,18 @@ export class ConceptManager extends DbManager {
         return await ConceptRelatedCorporationEntity.bulkCreate(input);
     }
 
-    public async updateRelatedCorporation(id: number, input: Partial<CreateRelatedCorporationInput>): Promise<ConceptRelatedCorporationInfo> {
-        const result = await ConceptRelatedCorporationEntity.update(input, {
-            where: { id }
-        });
-        console.log(result);
-        return ConceptRelatedCorporationInfo.Empty;
-    }
+    // public async updateRelatedCorporation(id: number, input: Partial<CreateRelatedCorporationInput>): Promise<ConceptRelatedCorporationInfo> {
+    //     const result = await ConceptRelatedCorporationEntity.update(input, {
+    //         where: { id }
+    //     });
+    //     console.log(result);
+    //     return ConceptRelatedCorporationInfo.Empty;
+    // }
 
-    public async createRelatedTechnologies(input: CreateRelatedTechnologyInput[]): Promise<CommonMutationResult> {
+    public async createRelatedTechnologies(concept: ConceptEntity, technologyIds: number[]): Promise<CommonMutationResult> {
         try {
-            await ConceptRelatedTechnologyEntity.bulkCreate(input);
+            await concept.addTechnologies(technologyIds);
+            // await ConceptRelatedTechnologyEntity.bulkCreate(input);
             return { success: true, message: "" };
 
         } catch (error) {

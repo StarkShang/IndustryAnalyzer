@@ -1,5 +1,8 @@
-mutation($input: [CreateConceptRelatedTechnologyInput!]!) {
-    createConceptRelatedTechnologies(input: $input) {
+mutation($conceptId: BigInt!, $technologyIds: [BigInt!]!) {
+    createConceptRelatedTechnologies(
+        conceptId: $conceptId,
+        technologyIds: $technologyIds
+    ) {
         success
         message
     }

@@ -1,7 +1,21 @@
-import { Sequelize, DataTypes, Model } from "sequelize";
-import Timestamp from "./timestamp";
+import { Sequelize, DataTypes, Model, Optional } from "sequelize";
+import { Timestamp, TimestampEntity } from "./timestamp";
 
-export class CorporationEntity extends Model { }
+interface CorporationAttributes extends Timestamp {
+    id: number;
+    name: string;
+    country: string;
+}
+interface CorporationCreationAttributes extends Optional<CorporationAttributes, "id" | "createdAt" | "updatedAt"> {}
+export class CorporationEntity extends Model<CorporationAttributes, CorporationCreationAttributes>
+    implements CorporationAttributes
+{
+    public id!: number;
+    public name!: string;
+    public country!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
+}
 
 export function init(sequelize: Sequelize) {
     CorporationEntity.init({
@@ -19,7 +33,7 @@ export function init(sequelize: Sequelize) {
             type: DataTypes.STRING,
             allowNull: false
         },
-        ...Timestamp
+        ...TimestampEntity
     }, {
         sequelize,
         modelName: "corporation"

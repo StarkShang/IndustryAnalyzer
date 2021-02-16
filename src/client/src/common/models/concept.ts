@@ -33,8 +33,3 @@ export interface CreateConceptRelatedCorporationInput {
     corporationId: number;
     description: string;
 }
-
-export interface CreateConceptRelatedTechnologyInput {
-    conceptId: number;
-    technologyId: number;
-}

@@ -1,10 +1,30 @@
-import { Sequelize, DataTypes, Model } from "sequelize";
-import Timestamp from "./timestamp";
+import { NewsHostType } from "@/models";
+import { Sequelize, DataTypes, Model, Optional } from "sequelize";
+import { Timestamp, TimestampEntity} from "./timestamp";
 
-export class News extends Model { }
+interface NewsAttributes extends Timestamp {
+    id: number;
+    title: string;
+    content: string;
+    date: Date;
+    hostType: NewsHostType;
+}
+
+interface NewsCreationAttributes extends Optional<NewsAttributes, "id" | "createdAt" | "updatedAt"> {}
+export class NewsEntity extends Model<NewsAttributes, NewsCreationAttributes>
+    implements NewsAttributes
+{
+    public id!: number;
+    public title!: string;
+    public content!: string;
+    public date!: Date;
+    public hostType!: NewsHostType;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
+}
 
 export function init(sequelize: Sequelize) {
-    News.init({
+    NewsEntity.init({
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
@@ -22,7 +42,11 @@ export function init(sequelize: Sequelize) {
             type: DataTypes.DATE,
             allowNull: false
         },
-        ...Timestamp
+        hostType: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        ...TimestampEntity
     }, {
         sequelize,
         modelName: "news",
